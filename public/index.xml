@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hi, I&#39;m Jasroop!</title>
+    <link>https://jasroop.me/</link>
+    <description>Recent content on Hi, I&#39;m Jasroop!</description>
+    <generator>Hugo 0.125.1</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 18 Apr 2024 14:48:10 -0400</lastBuildDate>
+    <atom:link href="https://jasroop.me/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Who Am I?</title>
+      <link>https://jasroop.me/posts/aboutme/</link>
+      <pubDate>Thu, 18 Apr 2024 14:48:10 -0400</pubDate>
+      <guid>https://jasroop.me/posts/aboutme/</guid>
+      <description>I’m a 3rd year student at Boston College, studying computer science &amp;lt;&amp;gt; math and a few classes in neuroscience.&#xA;I&amp;rsquo;m currently exploring and looking for a company to get involved in and spend all my time on 🦤.&#xA;I have a lot of fun using my hands to build stuff. I&amp;rsquo;ve made rugs, random 3dprinted objects, etc. u name it. I do a lot of this as a part of the hatchery team.</description>
+    </item>
+    <item>
+      <title>Current Obsession</title>
+      <link>https://jasroop.me/posts/obsession/</link>
+      <pubDate>Wed, 17 Apr 2024 14:48:10 -0400</pubDate>
+      <guid>https://jasroop.me/posts/obsession/</guid>
+      <description>The Poppy War by R.F. Kuang. Adding updates on my reading journey here. (Please dm me on twitter if you&amp;rsquo;ve read this!!)</description>
+    </item>
+    <item>
+      <title>Topics I Want To Explore</title>
+      <link>https://jasroop.me/posts/idk/</link>
+      <pubDate>Fri, 28 Apr 2023 14:48:10 -0400</pubDate>
+      <guid>https://jasroop.me/posts/idk/</guid>
+      <description> Agriculture/Self-Sustaining Farms. </description>
+    </item>
+  </channel>
+</rss>
