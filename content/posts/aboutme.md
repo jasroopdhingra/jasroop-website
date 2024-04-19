@@ -14,3 +14,5 @@ Previously I did product/eng @ [Diem.](https://www.askdiem.com/)
 
 I also did a couple things at [Buildspace](https://buildspace.so/), [Boston Public Health Commission](https://www.boston.gov/government/cabinets/boston-public-health-commission), [Coforge](https://www.coforge.com/), and [Heart IO](https://www.heartio.ai/).
 
+---
+![me](/images/DSCN0294.JPG)
