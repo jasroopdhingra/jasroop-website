@@ -1,11 +1,12 @@
-
 <footer>
   <div style="display:flex">
     {{- range $index, $key := .Site.Params.Social -}}
-    <a class="soc" href="{{ $key.url }}" rel="me" title="{{ $key.name }}"><i data-feather="{{ $key.icon }}"></i></a>
-    <a href="sms:+14843740633" class="hello-button">Say Hello!</a>
-    <a class="border"></a>
+    <a class="soc" href="{{ $key.url }}" rel="me" title="{{ $key.name }}">
+      <i data-feather="{{ $key.icon }}"></i>
+    </a>
     {{- end -}}
+    <!-- The "Say Hello!" button should be here, outside the loop -->
+    <a href="sms:+1234567890" class="hello-button">Say Hello!</a>
   </div>
   <div class="footer-info">
     {{ dateFormat "2006" now }} {{ with .Site.Copyright }} {{ . }} {{ end }}
