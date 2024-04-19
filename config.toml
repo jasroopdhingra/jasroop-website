@@ -1,0 +1,38 @@
+baseURL = "https://jasroop.me"
+languageCode = "en-us"
+title = "Hi, I'm Jasroop!"
+theme = "archie"
+
+pygmentsstyle = "monokai"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
+
+[[params.social]]
+name = "Goodreads"
+icon = "book-open"
+url = "https://www.goodreads.com/user/show/116855931-jasroop"
+
+[[params.social]]
+name = "Twitter"
+icon = "twitter"
+url = "https://twitter.com/jasroopdhingra"
+
+[[params.social]]
+name = "LinkedIn"
+icon = "linkedin"
+url = "https://www.linkedin.com/in/jasroopdhingra"
+
+[[params.social]]
+name = "GitHub"
+icon = "github"
+url = "https://github.com/jasroopdhingra"
+
+[[menu.main]]
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "All posts"
+url = "/posts"
+weight = 2
