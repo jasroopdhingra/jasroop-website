@@ -1,12 +1,6 @@
 
-<div style="display:flex;">
-        <a href="sms:+14843740633" class="hello-button">Say Hi!👋</a>
-        {{- range $index, $key := .Site.Params.Social -}}
-        <a class="soc" href="{{ $key.url }}" rel="me" title="{{ $key.name }}">
-            <i data-feather="{{ $key.icon }}"></i>
-        </a>
-        {{- end -}}
-    </div>
+
+<a href="sms:+14843740633" class="hello-button">Say Hi!👋</a>
 <footer>
   <div style="display:flex">
     {{- range $index, $key := .Site.Params.Social -}}
