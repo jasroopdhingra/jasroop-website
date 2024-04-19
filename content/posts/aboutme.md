@@ -16,5 +16,3 @@ I also did a couple things at [Buildspace](https://buildspace.so/), [Boston Publ
 
 ---
 ![me](/public/images/DSCN0294.JPG)
-
-Me in Dublin :)
