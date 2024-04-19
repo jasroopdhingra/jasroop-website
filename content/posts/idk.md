@@ -2,8 +2,8 @@
 title: "Topics I Want To Explore"
 date: 2024-04-12T14:48:10-04:00
 ---
-1. Agriculture/Self-Sustaining Farms*.
-2. Number Theory**.
+1. Agriculture/Self-Sustaining Farms.*
+2. Number Theory.**
 
 *Inspired by season 2 of The Walking Dead.
 
