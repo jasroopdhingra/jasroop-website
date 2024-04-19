@@ -334,8 +334,8 @@ table td{
 /* CSS for the "Say Hello!" Button */
 .hello-button {
    display: inline-block;
-   margin: 10px 0;
-   padding: 10px 20px;
+   margin: 7px 0;
+   padding: 7px 20px;
    background-color: #fcb551;
    color: white;
    border-radius: 5px;
