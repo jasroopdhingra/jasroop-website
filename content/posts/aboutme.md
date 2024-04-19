@@ -16,6 +16,6 @@ I also did a couple things at [Buildspace](https://buildspace.so/), [Boston Publ
 
 - - -
 
-![Jasroop's Profile Picture](/content/posts/me.JPG)
+![Jasroop's Profile Picture](file:///Users/jasroopdhingra/Desktop/DSCN0294.JPG)
 
 Me in Dublin ✨
