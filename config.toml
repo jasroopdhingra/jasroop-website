@@ -9,7 +9,7 @@ pygmentscodefencesguesssyntax = true
 
 [[params.social]]
 name = "Goodreads"
-icon = goodreads-g
+icon = "book-open"
 url = "https://www.goodreads.com/user/show/116855931-jasroop"
 
 [[params.social]]
