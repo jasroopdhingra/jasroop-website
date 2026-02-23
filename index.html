@@ -1,177 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:site_name" content="jasroop dhingra">
-    <meta property="og:title" content="jasroop dhingra">
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="personal website of jasroop <3.">
-    <meta property="og:url" content="https://jasroop.me">
-    
-    <title>jasroop's website</title>
-    
-    <style>
-        body {
-            font-family: 'Times New Roman', sans-serif;
-            font-size: 18px;
-            line-height: 1.4;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-        }
-        .content {
-            margin-left: 20px;
-            margin-top: 100px;
-            max-width: 800px;
-        }
-        .space {
-            padding-left: 5px;
-            padding-right: 5px;
-        }
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-            margin-top: 0;
-        }
-        ul li:before {
-            content: "• ";
-            color: #333;
-        }
-        .svg-container {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-        .draggable-svg {
-            cursor: move;
-            touch-action: none;
-            margin: 10px;
-            position: relative;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:site_name" content="jasroop dhingra" />
+  <meta property="og:title" content="jasroop dhingra" />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content="personal website of jasroop." />
+  <meta property="og:url" content="https://jasroop.me" />
+  <title>jasroop dhingra</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
-    <div class="content">
-        <p>hi i'm jasroop.</p>
-        
-        <p>currently in boston. sometimes in pennsylvania and san francisco</p>
+  <main class="page">
 
-        <p style="margin-bottom: 0;">exploring:</p>
-        <ul>
-            <li><a href="writings/writings.html">writing</a></li>
-            <li><a href="books/books.html">books</a></li>
-            <li><a href="random/thoughts.html">random</a></li>
-        </ul>
+    <nav>
+      <span class="logo">jasroop dhingra</span>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="work.html">Work</a>
+        <a href="books/books.html">Books</a>
+        <a href="writings/writings.html">Writing</a>
+        <a href="connect.html">Connect</a>
+      </div>
+    </nav>
 
-        <p style="margin-bottom: 0;">links:</p>
-        <ul>
-          <li><a href="https://www.goodreads.com/user/show/116855931-jasroop">goodreads</a></li>
-          <li><a href="https://twitter.com/jasroopdhingra">twitter/X</a> </li>
-          <li>text me @ <a href="sms:+14843740633&body=hi! this is ">484-374-0633</a></li>
-        </ul>
-    </div>
+    <section class="hero reveal">
+      <h1>hi i'm jasroop.</h1>
+      <p>I build thoughtful digital products — and spend the rest of my time reading, writing, and chasing good ideas. Based in Boston.</p>
+    </section>
 
-    <div class="svg-container">
-        <!-- Blueberries -->
-        <svg class="draggable-svg" width="60" height="60" viewBox="0 0 60 60">
-            <circle cx="20" cy="30" r="10" fill="#3498db"/>
-            <circle cx="35" cy="20" r="10" fill="#3498db"/>
-            <circle cx="40" cy="35" r="10" fill="#3498db"/>
-            <path d="M20,20 Q25,15 30,20 M35,10 Q40,5 45,10 M40,25 Q45,20 50,25" stroke="#2980b9" stroke-width="2" fill="none"/>
-        </svg>
+    <section class="section reveal">
+      <h2>now</h2>
+      <ul class="simple-list" style="margin-top: var(--sp3);">
+        <li>
+          <a href="work.html">building reading tools and design systems</a>
+          <span>Boston</span>
+        </li>
+        <li>
+          <span>reading <em>East of Eden</em> — Steinbeck</span>
+          <span>in progress</span>
+        </li>
+        <li>
+          <a href="writings/writings.html">writing about gaming, prompting, and bookstores</a>
+          <span>2024</span>
+        </li>
+        <li>
+          <a href="connect.html">open to new projects</a>
+          <span>available</span>
+        </li>
+      </ul>
+    </section>
 
-        <!-- Flower -->
-        <svg class="draggable-svg" width="60" height="60" viewBox="0 0 60 60">
-            <circle cx="30" cy="30" r="10" fill="#ff79c6"/>
-            <circle cx="20" cy="20" r="10" fill="#ff79c6"/>
-            <circle cx="40" cy="20" r="10" fill="#ff79c6"/>
-            <circle cx="20" cy="40" r="10" fill="#ff79c6"/>
-            <circle cx="40" cy="40" r="10" fill="#ff79c6"/>
-            <circle cx="30" cy="30" r="5" fill="#ffeaa7"/>
-        </svg>
+    <section class="section reveal">
+      <h2>recent writing</h2>
+      <ul class="simple-list" style="margin-top: var(--sp3);">
+        <li>
+          <a href="writings/bookstores.html">a few moments in a bookstore</a>
+          <span>July 2024</span>
+        </li>
+        <li>
+          <a href="writings/prompt.html">gaming and prompting</a>
+          <span>July 2024</span>
+        </li>
+        <li>
+          <a href="writings/developer.html">building a developer ecosystem</a>
+          <span>June 2024</span>
+        </li>
+        <li>
+          <a href="writings/recruiter.html">being a recruiter for a week</a>
+          <span>June 2024</span>
+        </li>
+      </ul>
+      <p style="margin-top: var(--sp3);"><a href="writings/writings.html" class="label">All writing →</a></p>
+    </section>
 
-        <!-- Plant -->
-        <svg class="draggable-svg" width="60" height="60" viewBox="0 0 60 60">
-            <!-- Stem -->
-            <path d="M30,60 Q28,30 30,10 Q32,30 30,60" fill="#2ecc71"/>
-            <!-- Left leaf -->
-            <path d="M30,40 Q15,35 20,20 Q25,35 30,40" fill="#2ecc71"/>
-            <!-- Right leaf -->
-            <path d="M30,40 Q45,35 40,20 Q35,35 30,40" fill="#2ecc71"/>
-            <!-- Flower center -->
-            <circle cx="30" cy="10" r="5" fill="#f1c40f"/>
-            <!-- Flower petals -->
-            <circle cx="30" cy="3" r="3" fill="#829ecf"/>
-            <circle cx="35" cy="5" r="3" fill="#829ecf"/>
-            <circle cx="25" cy="5" r="3" fill="#829ecf"/>
-            <circle cx="33" cy="10" r="3" fill="#829ecf"/>
-            <circle cx="27" cy="10" r="3" fill="#829ecf"/>
-        </svg>
+    <section class="section reveal">
+      <h2>currently reading</h2>
+      <ul class="simple-list" style="margin-top: var(--sp3);">
+        <li>
+          <a href="https://www.goodreads.com/book/show/4406.East_of_Eden">East of Eden</a>
+          <span>Steinbeck</span>
+        </li>
+        <li>
+          <a href="https://www.goodreads.com/book/show/122765395-elon-musk">Elon Musk</a>
+          <span>Isaacson</span>
+        </li>
+        <li>
+          <a href="https://www.goodreads.com/book/show/25666050-algorithms-to-live-by">Algorithms to Live By</a>
+          <span>Christian &amp; Griffiths</span>
+        </li>
+      </ul>
+      <p style="margin-top: var(--sp3);"><a href="books/books.html" class="label">Full reading list →</a></p>
+    </section>
 
-        <svg class="draggable-svg" width="60" height="60" viewBox="0 0 60 60">
-            <circle cx="30" cy="30" r="25" fill="#ffa502"/>
-            <path d="M30,5 Q40,5 45,15 M30,5 Q20,5 15,15" stroke="#ff6b6b" stroke-width="2" fill="none"/>
-            <circle cx="30" cy="20" r="2" fill="#ff6b6b"/>
-        </svg>
+    <section class="section reveal">
+      <h2>elsewhere</h2>
+      <ul class="simple-list" style="margin-top: var(--sp3);">
+        <li>
+          <a href="https://www.goodreads.com/user/show/116855931-jasroop">goodreads</a>
+          <span>@jasroop</span>
+        </li>
+        <li>
+          <a href="https://twitter.com/jasroopdhingra">twitter / X</a>
+          <span>@jasroopdhingra</span>
+        </li>
+        <li>
+          <a href="sms:+14843740633&body=hi!">text</a>
+          <span>484-374-0633</span>
+        </li>
+      </ul>
+    </section>
 
-        <svg class="draggable-svg" width="60" height="60" viewBox="0 0 60 60">
-            <circle cx="30" cy="35" r="25" fill="#ff366b"/>
-            <path d="M30,10 Q40,10 40,20 L30,30 L20,20 Q20,10 30,10 Z" fill="#2ed573"/>
-            <path d="M30,5 Q35,0 40,5" stroke="#2ed573" stroke-width="2" fill="none"/>
-        </svg>
+    <footer class="site-footer">
+      <p>Jasroop Dhingra · 2026</p>
+      <p><a href="connect.html" class="label">say hi →</a></p>
+    </footer>
 
-        
-    </div>
+  </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const draggables = document.querySelectorAll('.draggable-svg');
+  <section class="designer-panel">
+    <label style="font-size:0.72rem;"><input id="designerToggle" type="checkbox" /> Grid</label>
+  </section>
 
-            draggables.forEach(draggable => {
-                let isDragging = false;
-                let startX, startY;
-                let originalX = 0, originalY = 0;
-
-                function onStart(e) {
-                    isDragging = true;
-                    startX = e.clientX || e.touches[0].clientX;
-                    startY = e.clientY || e.touches[0].clientY;
-                    const style = window.getComputedStyle(draggable);
-                    const matrix = new DOMMatrix(style.transform);
-                    originalX = matrix.m41;
-                    originalY = matrix.m42;
-                    draggable.style.zIndex = "1000";
-                }
-
-                function onMove(e) {
-                    if (!isDragging) return;
-                    e.preventDefault();
-                    const clientX = e.clientX || e.touches[0].clientX;
-                    const clientY = e.clientY || e.touches[0].clientY;
-                    const deltaX = clientX - startX;
-                    const deltaY = clientY - startY;
-                    const newX = originalX + deltaX;
-                    const newY = originalY + deltaY;
-                    draggable.style.transform = `translate(${newX}px, ${newY}px)`;
-                }
-
-                function onEnd() {
-                    isDragging = false;
-                    draggable.style.zIndex = "auto";
-                }
-
-                draggable.addEventListener('mousedown', onStart);
-                draggable.addEventListener('touchstart', onStart);
-
-                document.addEventListener('mousemove', onMove);
-                document.addEventListener('touchmove', onMove, { passive: false });
-
-                document.addEventListener('mouseup', onEnd);
-                document.addEventListener('touchend', onEnd);
-            });
-        });
-    </script>
+  <script src="assets/main.js"></script>
 </body>
 </html>
