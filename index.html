@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Jasroop Dhingra</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23f9f6f0'/><text x='16' y='23' font-size='20' text-anchor='middle' font-family='Georgia,serif' fill='%23b84a2a'>J</text></svg>">
   <style>
     :root {
       --bg: #f9f6f0;
@@ -396,10 +397,7 @@
 
 </div>
 
-<canvas id="bubbles" style="display:none"></canvas>
-
 <script>
-// geo-aware location pill using ipapi.co (free, no key, production-grade)
 fetch('https://ipapi.co/json/')
   .then(r => r.json())
   .then(data => {
@@ -423,13 +421,9 @@ fetch('https://ipapi.co/json/')
         : 'Boston &rarr; San Francisco (soon)';
     }
   })
-  .catch(() => {
-    // fallback: keep default SF
-  });
+  .catch(() => {});
 
-// bubbles
 const canvas = document.getElementById('bubbles');
-canvas.style.display = '';
 const ctx = canvas.getContext('2d');
 let W, H, bubbles = [];
 function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
