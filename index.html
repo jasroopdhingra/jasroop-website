@@ -2,128 +2,461 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta property="og:site_name" content="jasroop dhingra" />
-  <meta property="og:title" content="jasroop dhingra" />
-  <meta property="og:type" content="website" />
-  <meta property="og:description" content="personal website of jasroop." />
-  <meta property="og:url" content="https://jasroop.me" />
-  <title>jasroop dhingra</title>
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-  <link rel="stylesheet" href="assets/styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jasroop Dhingra</title>
+  <style>
+    :root {
+      --bg: #f9f6f0;
+      --text: #1c1510;
+      --muted: #9a8a76;
+      --accent: #b84a2a;
+      --border: #e0d8cc;
+      --card: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Georgia', serif;
+      font-size: 15.5px;
+      line-height: 1.8;
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 80px 24px 120px;
+      position: relative;
+    }
+
+    #bubbles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap { position: relative; z-index: 1; }
+
+    .name-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+
+    .name { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.06em; }
+
+    .loc-pill {
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pulse {
+      width: 6px; height: 6px;
+      background: #5aaa80;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50% { opacity:.4; transform:scale(1.4); }
+    }
+
+    .headline {
+      font-size: 1.55rem;
+      font-weight: normal;
+      line-height: 1.45;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .sub {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 48px;
+      font-style: italic;
+    }
+
+    nav {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 60px;
+      font-size: 0.82rem;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color .2s;
+      border-bottom: none;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    section { margin-bottom: 52px; }
+
+    h2 {
+      font-size: 0.68rem;
+      font-weight: normal;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    p { color: #3a2e20; margin-bottom: 14px; }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
+
+    ul { list-style: none; }
+
+    ul li {
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    ul li:last-child { border-bottom: none; }
+
+    .ll { color: var(--text); }
+    .lr { color: var(--muted); font-size: 0.8rem; white-space: nowrap; font-style: italic; }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: all .2s;
+    }
+
+    a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    .shelf-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 20px 20px 16px;
+      margin-bottom: 20px;
+    }
+
+    .shelf-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .books-row {
+      display: flex;
+      gap: 7px;
+      align-items: flex-end;
+      height: 90px;
+      border-bottom: 3px solid var(--border);
+      padding-bottom: 0;
+    }
+
+    .book {
+      border-radius: 1px 3px 3px 1px;
+      cursor: pointer;
+      transition: transform .18s, box-shadow .18s;
+      position: relative;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-size: 0.5rem;
+      color: rgba(255,255,255,0.9);
+      font-family: Georgia, serif;
+      letter-spacing: 0.04em;
+      padding: 5px 3px;
+      border-left: 2px solid rgba(0,0,0,0.18);
+      user-select: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-decoration: none;
+      display: block;
+    }
+
+    .book:hover {
+      transform: translateY(-14px);
+      box-shadow: 2px 6px 16px rgba(0,0,0,0.18);
+      z-index: 10;
+      border-bottom: none;
+    }
+
+    .book-tooltip {
+      display: none;
+      position: absolute;
+      bottom: 108%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text);
+      color: var(--bg);
+      font-size: 0.68rem;
+      padding: 5px 9px;
+      border-radius: 2px;
+      white-space: nowrap;
+      writing-mode: horizontal-tb;
+      z-index: 20;
+      font-family: Georgia, serif;
+      font-style: italic;
+    }
+
+    .book:hover .book-tooltip { display: block; }
+
+    .reading-now-wrap { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+
+    .reading-now {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 2px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color .2s;
+    }
+
+    .reading-now:hover { border-left-color: #8a3018; border-bottom: 1px solid var(--border); }
+    .rn-title { font-style: italic; color: var(--text); }
+    .rn-author { font-size: 0.82rem; color: var(--muted); }
+    .rn-badge { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); white-space: nowrap; }
+
+    .footer { font-size: 0.75rem; color: var(--muted); margin-top: 72px; }
+  </style>
 </head>
 <body>
-  <main class="page">
 
-    <nav>
-      <span class="logo">jasroop dhingra</span>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="work.html">Work</a>
-        <a href="books/books.html">Books</a>
-        <a href="writings/writings.html">Writing</a>
-        <a href="connect.html">Connect</a>
-      </div>
-    </nav>
+<canvas id="bubbles"></canvas>
 
-    <section class="hero reveal">
-      <h1>hi i'm jasroop.</h1>
-      <p>I build thoughtful digital products — and spend the rest of my time reading, writing, and chasing good ideas. Based in Boston.</p>
-    </section>
+<div class="wrap">
 
-    <section class="section reveal">
-      <h2>now</h2>
-      <ul class="simple-list" style="margin-top: var(--sp3);">
-        <li>
-          <a href="work.html">building reading tools and design systems</a>
-          <span>Boston</span>
-        </li>
-        <li>
-          <span>reading <em>East of Eden</em> — Steinbeck</span>
-          <span>in progress</span>
-        </li>
-        <li>
-          <a href="writings/writings.html">writing about gaming, prompting, and bookstores</a>
-          <span>2024</span>
-        </li>
-        <li>
-          <a href="connect.html">open to new projects</a>
-          <span>available</span>
-        </li>
-      </ul>
-    </section>
+  <div class="name-row">
+    <div class="name">Jasroop Dhingra</div>
+    <div class="loc-pill">
+      <div class="pulse"></div>
+      Boston &rarr; San Francisco (soon)
+    </div>
+  </div>
 
-    <section class="section reveal">
-      <h2>recent writing</h2>
-      <ul class="simple-list" style="margin-top: var(--sp3);">
-        <li>
-          <a href="writings/bookstores.html">a few moments in a bookstore</a>
-          <span>July 2024</span>
-        </li>
-        <li>
-          <a href="writings/prompt.html">gaming and prompting</a>
-          <span>July 2024</span>
-        </li>
-        <li>
-          <a href="writings/developer.html">building a developer ecosystem</a>
-          <span>June 2024</span>
-        </li>
-        <li>
-          <a href="writings/recruiter.html">being a recruiter for a week</a>
-          <span>June 2024</span>
-        </li>
-      </ul>
-      <p style="margin-top: var(--sp3);"><a href="writings/writings.html" class="label">All writing →</a></p>
-    </section>
+  <div class="headline">Builder. Reader. Nerd who ships.</div>
+  <div class="sub">Growth engineer. CS grad. Founding engineer twice over.</div>
 
-    <section class="section reveal">
-      <h2>currently reading</h2>
-      <ul class="simple-list" style="margin-top: var(--sp3);">
-        <li>
-          <a href="https://www.goodreads.com/book/show/4406.East_of_Eden">East of Eden</a>
-          <span>Steinbeck</span>
-        </li>
-        <li>
-          <a href="https://www.goodreads.com/book/show/122765395-elon-musk">Elon Musk</a>
-          <span>Isaacson</span>
-        </li>
-        <li>
-          <a href="https://www.goodreads.com/book/show/25666050-algorithms-to-live-by">Algorithms to Live By</a>
-          <span>Christian &amp; Griffiths</span>
-        </li>
-      </ul>
-      <p style="margin-top: var(--sp3);"><a href="books/books.html" class="label">Full reading list →</a></p>
-    </section>
+  <nav>
+    <a href="#work">Work</a>
+    <a href="#projects">Projects</a>
+    <a href="#reading">Reading</a>
+    <a href="#writing">Writing</a>
+    <a href="mailto:jasroopdhingra@gmail.com">Contact</a>
+  </nav>
 
-    <section class="section reveal">
-      <h2>elsewhere</h2>
-      <ul class="simple-list" style="margin-top: var(--sp3);">
-        <li>
-          <a href="https://www.goodreads.com/user/show/116855931-jasroop">goodreads</a>
-          <span>@jasroop</span>
-        </li>
-        <li>
-          <a href="https://twitter.com/jasroopdhingra">twitter / X</a>
-          <span>@jasroopdhingra</span>
-        </li>
-        <li>
-          <a href="sms:+14843740633&body=hi!">text</a>
-          <span>484-374-0633</span>
-        </li>
-      </ul>
-    </section>
-
-    <footer class="site-footer">
-      <p>Jasroop Dhingra · 2026</p>
-      <p><a href="connect.html" class="label">say hi →</a></p>
-    </footer>
-
-  </main>
-
-  <section class="designer-panel">
-    <label style="font-size:0.72rem;"><input id="designerToggle" type="checkbox" /> Grid</label>
+  <section>
+    <h2>About</h2>
+    <p>
+      CS grad from Boston College. In 2024 I was a founding engineer at
+      <a href="https://shapes.inc" target="_blank">Shapes</a> &mdash; 30M+ users, Lightspeed and Sequoia backed.
+      Rebuilt AI inference stacks, owned product surfaces end to end, shipped things that mattered
+      at a company where speed was the only strategy.
+    </p>
+    <p>
+      Late 2025 I did it again at Margin. Now I want to do it somewhere bigger.
+      When I'm not at a computer I'm reading. I'm currently on book 131:
+      <a href="https://www.goodreads.com/book/show/208931300-intermezzo" target="_blank"><em>Intermezzo</em></a>.
+    </p>
   </section>
 
-  <script src="assets/main.js"></script>
+  <hr />
+
+  <section id="work">
+    <h2>Experience</h2>
+    <ul>
+      <li>
+        <span class="ll">Founding Engineer, Shapes Inc</span>
+        <span class="lr">2024</span>
+      </li>
+      <li>
+        <span class="ll">Founding Engineer, Margin</span>
+        <span class="lr">Late 2025</span>
+      </li>
+      <li>
+        <span class="ll">ML Research, Boston College &mdash; protein-aptamer model, 97.96% accuracy</span>
+        <span class="lr">2023&ndash;2024</span>
+      </li>
+      <li>
+        <span class="ll">B.S. Computer Science, Boston College</span>
+        <span class="lr">Class of 2025</span>
+      </li>
+    </ul>
+  </section>
+
+  <hr />
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <ul>
+      <li>
+        <span class="ll">
+          <a href="https://github.com/jasroopdhingra/book-critic" target="_blank">Bookshelf</a>
+          &mdash; log a book, answer questions from an AI acting like an AP English teacher, get a review written in your own voice.
+        </span>
+        <span class="lr"><a href="https://book-critic.onrender.com" target="_blank">live &nearr;</a></span>
+      </li>
+      <li>
+        <span class="ll">
+          <a href="https://github.com/jasroopdhingra/posture" target="_blank">Posture monitor</a>
+          &mdash; real-time slouch detection via webcam. skeleton overlay, posture bar, pulsing red border when you're being a goblin. runs fully offline.
+        </span>
+        <span class="lr">Python, MediaPipe</span>
+      </li>
+    </ul>
+  </section>
+
+  <hr />
+
+  <section id="reading">
+    <h2>Reading</h2>
+
+    <div class="shelf-wrap">
+      <div class="shelf-label">Favorites &mdash; click a spine</div>
+      <div class="books-row">
+        <a class="book" href="https://www.goodreads.com/book/show/23807.The_Silence_of_the_Lambs" target="_blank" style="background:#6b3a2a;width:26px;height:82px;">Silence of the Lambs<div class="book-tooltip">The Silence of the Lambs &mdash; Thomas Harris</div></a>
+        <a class="book" href="https://www.goodreads.com/book/show/19063.The_Book_Thief" target="_blank" style="background:#2a4a6b;width:22px;height:74px;">The Book Thief<div class="book-tooltip">The Book Thief &mdash; Markus Zusak</div></a>
+        <a class="book" href="https://www.goodreads.com/book/show/4406.East_of_Eden" target="_blank" style="background:#4a6b3a;width:28px;height:82px;">East of Eden<div class="book-tooltip">East of Eden &mdash; John Steinbeck &#9733;</div></a>
+        <a class="book" href="https://www.goodreads.com/book/show/166997.Stoner" target="_blank" style="background:#5a3a6b;width:20px;height:68px;">Stoner<div class="book-tooltip">Stoner &mdash; John Williams</div></a>
+        <a class="book" href="https://www.goodreads.com/book/show/170448.Animal_Farm" target="_blank" style="background:#8a6a2a;width:24px;height:72px;">Animal Farm<div class="book-tooltip">Animal Farm &mdash; George Orwell</div></a>
+        <a class="book" href="https://www.goodreads.com/book/show/18321.Arcadia" target="_blank" style="background:#3a6b5a;width:22px;height:66px;">Arcadia<div class="book-tooltip">Arcadia &mdash; Tom Stoppard</div></a>
+        <a class="book" href="https://www.goodreads.com/book/show/5107.The_Catcher_in_the_Rye" target="_blank" style="background:#6b4a3a;width:26px;height:80px;">Catcher in the Rye<div class="book-tooltip">The Catcher in the Rye &mdash; J.D. Salinger</div></a>
+        <a class="book" href="https://www.goodreads.com/book/show/5129.Brave_New_World" target="_blank" style="background:#3a4a6b;width:20px;height:70px;">Brave New World<div class="book-tooltip">Brave New World &mdash; Aldous Huxley</div></a>
+        <a class="book" href="https://www.goodreads.com/book/show/865516.The_Cosmic_Serpent" target="_blank" style="background:#6b3a5a;width:24px;height:76px;">Cosmic Serpent<div class="book-tooltip">The Cosmic Serpent &mdash; Jeremy Narby</div></a>
+      </div>
+    </div>
+
+    <div class="reading-now-wrap">
+      <a class="reading-now" href="https://www.goodreads.com/book/show/208931300-intermezzo" target="_blank">
+        <div>
+          <div class="rn-title">Intermezzo</div>
+          <div class="rn-author">Sally Rooney &mdash; 25%</div>
+        </div>
+        <div class="rn-badge">reading now</div>
+      </a>
+      <a class="reading-now" href="https://www.goodreads.com/book/show/123444043-the-trio" target="_blank">
+        <div>
+          <div class="rn-title">The Trio</div>
+          <div class="rn-author">Johanna Hedman &mdash; p. 140 of 336</div>
+        </div>
+        <div class="rn-badge">reading now</div>
+      </a>
+    </div>
+
+  </section>
+
+  <hr />
+
+  <section id="writing">
+    <h2>Writing</h2>
+    <ul>
+      <li>
+        <span class="ll"><a href="https://jasroop.me/writings/developer">Building a developer ecosystem</a></span>
+        <span class="lr">Jun 2024</span>
+      </li>
+      <li>
+        <span class="ll"><a href="https://jasroop.me/writings/recruiter">Being a recruiter for a week</a></span>
+        <span class="lr">Jun 2024</span>
+      </li>
+      <li>
+        <span class="ll"><a href="https://jasroop.me/writings/prompt">Gaming and prompting</a></span>
+        <span class="lr">Jul 2024</span>
+      </li>
+      <li>
+        <span class="ll"><a href="https://jasroop.me/writings/bookstores">A few moments in a bookstore</a></span>
+        <span class="lr">Jul 2024</span>
+      </li>
+    </ul>
+  </section>
+
+  <hr />
+
+  <section id="now">
+    <h2>Now</h2>
+    <ul>
+      <li>
+        <span class="ll">Looking for growth engineering roles</span>
+        <span class="lr">Feb 2026</span>
+      </li>
+      <li>
+        <span class="ll">Moving to San Francisco</span>
+        <span class="lr">soon</span>
+      </li>
+      <li>
+        <span class="ll">Trying to hit 45 books this year</span>
+        <span class="lr">3 down, 42 to go</span>
+      </li>
+    </ul>
+  </section>
+
+  <hr />
+
+  <section>
+    <h2>Elsewhere</h2>
+    <ul>
+      <li>
+        <span class="ll"><a href="https://github.com/jasroopdhingra" target="_blank">GitHub</a></span>
+        <span class="lr">jasroopdhingra</span>
+      </li>
+      <li>
+        <span class="ll"><a href="https://twitter.com/jasroopdhingra" target="_blank">X / Twitter</a></span>
+        <span class="lr">@jasroopdhingra</span>
+      </li>
+      <li>
+        <span class="ll"><a href="https://goodreads.com/jasroop" target="_blank">Goodreads</a></span>
+        <span class="lr">130 books read</span>
+      </li>
+      <li>
+        <span class="ll"><a href="mailto:jasroopdhingra@gmail.com">Email</a></span>
+        <span class="lr">jasroopdhingra@gmail.com</span>
+      </li>
+    </ul>
+  </section>
+
+  <div class="footer">jasroop.me &middot; Boston, MA &middot; 2026</div>
+
+</div>
+
+<script>
+const canvas = document.getElementById('bubbles');
+const ctx = canvas.getContext('2d');
+let W, H, bubbles = [];
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+function mkBubble() {
+  return { x: Math.random()*W, y: H+Math.random()*200, r: 8+Math.random()*28,
+    speed: 0.25+Math.random()*0.5, drift: (Math.random()-0.5)*0.3,
+    opacity: 0.03+Math.random()*0.06, hue: 20+Math.random()*30 };
+}
+function init() { resize(); bubbles = Array.from({length:22}, mkBubble); }
+function draw() {
+  ctx.clearRect(0,0,W,H);
+  for (const b of bubbles) {
+    ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+    ctx.strokeStyle=`hsla(${b.hue},40%,55%,${b.opacity})`; ctx.lineWidth=1.2; ctx.stroke();
+    b.y-=b.speed; b.x+=b.drift;
+    if (b.y+b.r<-10) { Object.assign(b,mkBubble()); b.y=H+b.r; }
+  }
+  requestAnimationFrame(draw);
+}
+window.addEventListener('resize', resize);
+init(); draw();
+</script>
 </body>
 </html>
