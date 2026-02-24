@@ -13,9 +13,7 @@
       --border: #e0d8cc;
       --card: #ffffff;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       background: var(--bg);
       color: var(--text);
@@ -27,7 +25,6 @@
       padding: 80px 24px 120px;
       position: relative;
     }
-
     #bubbles {
       position: fixed;
       top: 0; left: 0;
@@ -35,18 +32,14 @@
       pointer-events: none;
       z-index: 0;
     }
-
     .wrap { position: relative; z-index: 1; }
-
     .name-row {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       margin-bottom: 40px;
     }
-
     .name { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.06em; }
-
     .loc-pill {
       font-size: 0.72rem;
       color: var(--muted);
@@ -54,7 +47,6 @@
       align-items: center;
       gap: 5px;
     }
-
     .pulse {
       width: 6px; height: 6px;
       background: #5aaa80;
@@ -62,12 +54,10 @@
       animation: pulse 2s infinite;
       flex-shrink: 0;
     }
-
     @keyframes pulse {
       0%,100% { opacity:1; transform:scale(1); }
       50% { opacity:.4; transform:scale(1.4); }
     }
-
     .headline {
       font-size: 1.55rem;
       font-weight: normal;
@@ -75,21 +65,18 @@
       margin-bottom: 10px;
       color: var(--text);
     }
-
     .sub {
       font-size: 0.95rem;
       color: var(--muted);
       margin-bottom: 48px;
       font-style: italic;
     }
-
     nav {
       display: flex;
       gap: 24px;
       margin-bottom: 60px;
       font-size: 0.82rem;
     }
-
     nav a {
       color: var(--muted);
       text-decoration: none;
@@ -97,11 +84,8 @@
       transition: color .2s;
       border-bottom: none;
     }
-
     nav a:hover { color: var(--accent); }
-
     section { margin-bottom: 52px; }
-
     h2 {
       font-size: 0.68rem;
       font-weight: normal;
@@ -110,13 +94,9 @@
       color: var(--muted);
       margin-bottom: 18px;
     }
-
     p { color: #3a2e20; margin-bottom: 14px; }
-
     hr { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
-
     ul { list-style: none; }
-
     ul li {
       padding: 11px 0;
       border-bottom: 1px solid var(--border);
@@ -125,21 +105,16 @@
       align-items: baseline;
       gap: 12px;
     }
-
     ul li:last-child { border-bottom: none; }
-
     .ll { color: var(--text); }
     .lr { color: var(--muted); font-size: 0.8rem; white-space: nowrap; font-style: italic; }
-
     a {
       color: inherit;
       text-decoration: none;
       border-bottom: 1px solid var(--border);
       transition: all .2s;
     }
-
     a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-
     .shelf-wrap {
       background: var(--card);
       border: 1px solid var(--border);
@@ -147,7 +122,6 @@
       padding: 20px 20px 16px;
       margin-bottom: 20px;
     }
-
     .shelf-label {
       font-size: 0.65rem;
       text-transform: uppercase;
@@ -155,7 +129,6 @@
       color: var(--muted);
       margin-bottom: 14px;
     }
-
     .books-row {
       display: flex;
       gap: 7px;
@@ -164,7 +137,6 @@
       border-bottom: 3px solid var(--border);
       padding-bottom: 0;
     }
-
     .book {
       border-radius: 1px 3px 3px 1px;
       cursor: pointer;
@@ -185,14 +157,12 @@
       text-decoration: none;
       display: block;
     }
-
     .book:hover {
       transform: translateY(-14px);
       box-shadow: 2px 6px 16px rgba(0,0,0,0.18);
       z-index: 10;
       border-bottom: none;
     }
-
     .book-tooltip {
       display: none;
       position: absolute;
@@ -210,11 +180,8 @@
       font-family: Georgia, serif;
       font-style: italic;
     }
-
     .book:hover .book-tooltip { display: block; }
-
     .reading-now-wrap { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
-
     .reading-now {
       display: flex;
       align-items: center;
@@ -228,12 +195,10 @@
       color: inherit;
       transition: border-color .2s;
     }
-
     .reading-now:hover { border-left-color: #8a3018; border-bottom: 1px solid var(--border); }
     .rn-title { font-style: italic; color: var(--text); }
     .rn-author { font-size: 0.82rem; color: var(--muted); }
     .rn-badge { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); white-space: nowrap; }
-
     .footer { font-size: 0.75rem; color: var(--muted); margin-top: 72px; }
   </style>
 </head>
@@ -247,7 +212,7 @@
     <div class="name">Jasroop Dhingra</div>
     <div class="loc-pill">
       <div class="pulse"></div>
-      Boston &rarr; San Francisco (soon)
+      <span id="loc-text">Boston &rarr; San Francisco (soon)</span>
     </div>
   </div>
 
@@ -266,7 +231,7 @@
     <h2>About</h2>
     <p>
       CS grad from Boston College. In 2024 I was a founding engineer at
-      <a href="https://shapes.inc" target="_blank">Shapes</a> &mdash; 30M+ users, Lightspeed and Sequoia backed.
+      <a href="https://shapes.inc" target="_blank">Shapes</a>, 30M+ users, Lightspeed and Sequoia backed.
       Rebuilt AI inference stacks, owned product surfaces end to end, shipped things that mattered
       at a company where speed was the only strategy.
     </p>
@@ -291,7 +256,7 @@
         <span class="lr">Late 2025</span>
       </li>
       <li>
-        <span class="ll">ML Research, Boston College &mdash; protein-aptamer model, 97.96% accuracy</span>
+        <span class="ll">ML Research, Boston College, protein-aptamer model, 97.96% accuracy</span>
         <span class="lr">2023&ndash;2024</span>
       </li>
       <li>
@@ -309,9 +274,9 @@
       <li>
         <span class="ll">
           <a href="https://github.com/jasroopdhingra/book-critic" target="_blank">Bookshelf</a>
-          &mdash; log a book, answer questions from an AI acting like an AP English teacher, get a review written in your own voice.
+          &mdash; log a book, answer questions from an AI acting like an AP English teacher, get a review written in your own voice. React, Node, Groq, Turso.
         </span>
-        <span class="lr"><a href="https://book-critic.onrender.com" target="_blank">live &nearr;</a></span>
+        <span class="lr"><a href="https://book-critic.onrender.com" target="_blank">live &#8599;</a></span>
       </li>
       <li>
         <span class="ll">
@@ -327,7 +292,6 @@
 
   <section id="reading">
     <h2>Reading</h2>
-
     <div class="shelf-wrap">
       <div class="shelf-label">Favorites &mdash; click a spine</div>
       <div class="books-row">
@@ -342,7 +306,6 @@
         <a class="book" href="https://www.goodreads.com/book/show/865516.The_Cosmic_Serpent" target="_blank" style="background:#6b3a5a;width:24px;height:76px;">Cosmic Serpent<div class="book-tooltip">The Cosmic Serpent &mdash; Jeremy Narby</div></a>
       </div>
     </div>
-
     <div class="reading-now-wrap">
       <a class="reading-now" href="https://www.goodreads.com/book/show/208931300-intermezzo" target="_blank">
         <div>
@@ -359,7 +322,6 @@
         <div class="rn-badge">reading now</div>
       </a>
     </div>
-
   </section>
 
   <hr />
@@ -434,15 +396,50 @@
 
 </div>
 
+<canvas id="bubbles" style="display:none"></canvas>
+
 <script>
+// geo-aware location pill using ipapi.co (free, no key, production-grade)
+fetch('https://ipapi.co/json/')
+  .then(r => r.json())
+  .then(data => {
+    const tz = data.timezone || '';
+    const region = data.region || '';
+    const eastCoastTZs = [
+      'America/New_York','America/Detroit','America/Indiana/Indianapolis',
+      'America/Kentucky/Louisville','America/Toronto','America/Montreal'
+    ];
+    const eastCoastStates = [
+      'New York','New Jersey','Connecticut','Massachusetts','Pennsylvania',
+      'Virginia','Maryland','North Carolina','South Carolina','Georgia',
+      'Florida','Maine','New Hampshire','Vermont','Rhode Island','Delaware',
+      'Washington D.C.','West Virginia'
+    ];
+    const isEast = eastCoastTZs.includes(tz) || eastCoastStates.includes(region);
+    const el = document.getElementById('loc-text');
+    if (el) {
+      el.innerHTML = isEast
+        ? 'Boston &rarr; New York City (soon)'
+        : 'Boston &rarr; San Francisco (soon)';
+    }
+  })
+  .catch(() => {
+    // fallback: keep default SF
+  });
+
+// bubbles
 const canvas = document.getElementById('bubbles');
+canvas.style.display = '';
 const ctx = canvas.getContext('2d');
 let W, H, bubbles = [];
 function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
 function mkBubble() {
-  return { x: Math.random()*W, y: H+Math.random()*200, r: 8+Math.random()*28,
-    speed: 0.25+Math.random()*0.5, drift: (Math.random()-0.5)*0.3,
-    opacity: 0.03+Math.random()*0.06, hue: 20+Math.random()*30 };
+  return {
+    x: Math.random()*W, y: H+Math.random()*200,
+    r: 8+Math.random()*28, speed: 0.25+Math.random()*0.5,
+    drift: (Math.random()-0.5)*0.3, opacity: 0.03+Math.random()*0.06,
+    hue: 20+Math.random()*30
+  };
 }
 function init() { resize(); bubbles = Array.from({length:22}, mkBubble); }
 function draw() {
