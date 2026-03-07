@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:site_name" content="jasroop dhingra">
+    <meta property="og:title" content="Oscar Guidelines: Scraper + Criteria Tree Explorer">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="A full-stack pipeline that turns Oscar Health medical guideline PDFs into browsable decision trees. Discover, download, structure with an LLM, browse in a React UI.">
+    <meta property="og:url" content="https://jasroop.me">
+
+    <title>Oscar Guidelines: Scraper and Criteria Tree Explorer</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+        }
+        .content {
+            margin-left: 20px;
+            margin-top: 100px; /* This will start the content lower on the page */
+            max-width: 800px;
+        }
+        .space {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 0; /* Remove top margin from lists */
+        }
+        ul li:before {
+            content: "• ";
+            color: #333;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 1.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Oscar Guidelines: Scraper + Criteria Tree Explorer</h1>
+        <p>A full-stack pipeline that turns Oscar Health medical guideline PDFs into browsable decision trees.</p>
+
+        <p>
+            <strong>What it does:</strong> Discovers PDFs from Oscar's clinical guidelines page, downloads them, extracts text, and uses an LLM (Groq / Llama 3.3 70B) to turn "initial" medical necessity criteria into structured JSON decision trees. A React UI lets you browse policies and expand/collapse AND/OR criteria.
+        </p>
+
+        <p>
+            Code: <a href="https://github.com/jasroopdhingra/oscar">github.com/jasroopdhingra/oscar</a>
+        </p>
+
+        <hr>
+
+        <h2>How it was built</h2>
+        <p>
+            Backend first: FastAPI app, SQLAlchemy models (policies, downloads, structured_policies), and SQLite. Then the pipeline services in order — scraper to discover PDF links from the guidelines page, downloader to fetch and store files with retries and throttling, extractor (pdfplumber + initial-section regex), and structurer (Groq, JSON mode, Pydantic validation). A CLI (<code class="space">run_pipeline.py</code>) runs discover → download → structure in one go or step-by-step; API routes expose the same triggers plus GETs for policy list and detail.
+        </p>
+        <p>
+            Frontend next: React + Vite + TypeScript, Tailwind. Policies list with filter tabs (All / Structured / Unstructured), then policy detail page and a recursive criteria tree component with AND/OR badges and expand/collapse. API client talks to the backend; proxy in Vite for local dev. After that, full pipeline run to populate the DB and structure 10+ guidelines, then README and docs updated with setup, run instructions, and the initial-only logic.
+        </p>
+
+        <h2>Pipeline</h2>
+        <ol>
+            <li><strong>Discover</strong> — Scrape the guidelines page; parse Next.js <code class="space">__NEXT_DATA__</code> to get PDF links and metadata. Upsert into SQLite by <code class="space">pdf_url</code>.</li>
+            <li><strong>Download</strong> — Resolve each listing URL to the real PDF (Contentful CDN) via the policy page's <code class="space">__NEXT_DATA__</code>. Stream to disk with retries and throttling.</li>
+            <li><strong>Structure</strong> — Extract text with pdfplumber (first 15 pages / 30k chars). Filter to "initial" criteria only (regex), then send to the LLM with a strict schema. Validate with Pydantic; store JSON or validation errors.</li>
+        </ol>
+
+        <h2>Initial-only logic</h2>
+        <p>
+            Guidelines often separate "Initial Authorization" from "Continuation/Renewal" criteria. Two layers:
+        </p>
+        <ul>
+            <li><strong>Layer 1</strong> — In the extractor: detect initial vs continuation section headers and slice the text so only the initial block is sent to the LLM.</li>
+            <li><strong>Layer 2</strong> — In the system prompt: instruct the model to output only initial criteria and to ignore continuation, exclusions, and appendices.</li>
+        </ul>
+        <p>
+            If no such headers exist, the full extracted text is sent and the prompt alone enforces the scope.
+        </p>
+
+        <h2>Stack</h2>
+        <ul>
+            <li><strong>Backend:</strong> FastAPI, SQLAlchemy (SQLite), Pydantic. Services: scraper, downloader, extractor, structurer (Groq, JSON mode).</li>
+            <li><strong>Frontend:</strong> React, Vite, TypeScript, Tailwind. Policies list (filter by structured/unstructured), policy detail, recursive criteria tree with AND/OR badges and expand/collapse.</li>
+            <li><strong>Run:</strong> <code class="space">python run_pipeline.py</code> for discover → download → structure; or POST to <code class="space">/api/pipeline/*</code>. UI: backend on 8000, frontend on 5173.</li>
+        </ul>
+
+        <h2>Decisions</h2>
+        <ul>
+            <li><code class="space">__NEXT_DATA__</code> over DOM scraping — stable, structured access to links and content.</li>
+            <li>Two-step PDF URL resolution — listing links are Next routes; the actual file URL lives in the policy page's JSON.</li>
+            <li>Pydantic validation on every LLM response — invalid output is stored in <code class="space">validation_error</code> instead of overwriting.</li>
+            <li>Idempotent steps — discover by unique URL; download and structure skip already-succeeded rows.</li>
+        </ul>
+
+        <p>
+            <a href="https://github.com/jasroopdhingra/oscar">View the repo →</a>
+        </p>
+    </div>
+</body>
+</html>
