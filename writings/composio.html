@@ -6,7 +6,7 @@
     <meta property="og:site_name" content="jasroop dhingra">
     <meta property="og:title" content="Building a Tool Dependency Graph for Agentic Workflows">
     <meta property="og:type" content="website">
-    <meta property="og:description" content="When an action needs another action first, the agent needs to know. How we built a dependency graph for Composio tools.">
+    <meta property="og:description" content="When an action needs another action first, the agent needs to know. How I built a dependency graph for Composio tools.">
     <meta property="og:url" content="https://jasroop.me">
 
     <title>Building a Tool Dependency Graph for Agentic Workflows</title>
@@ -21,7 +21,7 @@
         }
         .content {
             margin-left: 20px;
-            margin-top: 100px;
+            margin-top: 100px; /* This will start the content lower on the page */
             max-width: 800px;
         }
         .space {
@@ -31,44 +31,16 @@
         ul {
             list-style-type: none;
             padding-left: 0;
-            margin-top: 0;
+            margin-top: 0; /* Remove top margin from lists */
         }
         ul li:before {
             content: "• ";
             color: #333;
         }
-        p {
-            margin: 0 0 1rem;
-        }
-        h1 {
-            font-size: 1.5rem;
-            margin: 0 0 0.5rem;
-        }
-        h2 {
-            font-size: 1.2rem;
-            margin: 1.5rem 0 0.5rem;
-        }
-        h3 {
-            font-size: 1.05rem;
-            margin: 1rem 0 0.35rem;
-        }
-        a {
-            color: #333;
-            text-decoration: underline;
-        }
-        a:hover {
-            color: #666;
-        }
-        code {
-            font-family: monospace;
-            font-size: 0.9em;
-            background: #f0f0f0;
-            padding: 0.1em 0.3em;
-        }
         hr {
             border: none;
-            border-top: 1px solid #ccc;
-            margin: 2rem 0;
+            border-top: 1px solid #e0e0e0;
+            margin: 1.5rem 0;
         }
     </style>
 </head>
@@ -77,52 +49,35 @@
 
         <p style="margin-bottom: 0;"><u>Building a Tool Dependency Graph for Agentic Workflows</u></p>
 
-        <p>When an action needs another action first, the agent needs to know. Here’s how we built a graph that tells it.</p>
-
-        <p><strong>TL;DR</strong> — We built a pipeline that turns Composio’s Google Super and GitHub tool schemas into a dependency graph: nodes are tools, edges are “tool A can satisfy an input of tool B.” Three-pass resolution (description refs → param matching → optional LLM) infers dependencies; we output JSON + an interactive Cytoscape viz. Use it to know what to run before what, or what to ask the user for.</p>
-
-        <h2>The problem</h2>
-        <p>In agentic flows, actions often depend on other actions. <code>GMAIL_REPLY_TO_THREAD</code> needs a <code>thread_id</code>. You don’t pull that from thin air—you get it from <code>GMAIL_LIST_THREADS</code> (or search, or another tool). The agent has to choose: either run something else first, or ask the user. Without a map of which tools provide which inputs, that choice is guesswork.</p>
-        <p>We wanted a single artifact: a graph where nodes are tools and edges are “source tool’s output can fill target tool’s input.” Scope: <a href="https://docs.composio.dev/toolkits/googlesuper" target="_blank" rel="noopener">Google Super</a> and <a href="https://docs.composio.dev/toolkits/github" target="_blank" rel="noopener">GitHub</a> toolkits. Deliverable: the graph as data plus an interactive visualization.</p>
-
-        <h2>What we built</h2>
-        <p>A small pipeline: fetch tools from the Composio API → extract params and descriptions → resolve dependencies in three passes → compute “user-provided” inputs (required params no edge satisfies) → write <code>dependency_graph.json</code> and generate <code>graph.html</code>.</p>
-        <p>Run it with Bun: <code>bun run src/index.ts</code>. Flags: <code>--skip-fetch</code> (use cached tools), <code>--no-llm</code> (deterministic only), <code>--skip-viz</code> (no HTML). One command from zero to viz.</p>
-
-        <h2>How dependency resolution works</h2>
-        <p>We don’t assume the API gives us explicit “tool X depends on tool Y.” We infer edges from schemas: descriptions, parameter names, and (optionally) an LLM that reads tool docs and suggests data providers.</p>
-
-        <h3>Pass 1 — Description refs</h3>
-        <p>If a parameter or tool description explicitly mentions another tool (e.g. “use the thread ID from <code>GMAIL_LIST_THREADS</code>”), we add an edge and mark it <strong>high</strong> confidence. Straightforward and reliable.</p>
-
-        <h3>Pass 2 — Param matching</h3>
-        <p>We normalize names (e.g. <code>thread_id</code> / <code>threadId</code>) and match “this tool’s output field X” to “that tool’s required input X.” Same-service matches are preferred; cross-service we only connect for known-safe IDs (spreadsheet, thread, calendar, etc.) to avoid nonsense links. Result: <strong>medium</strong> confidence edges.</p>
-
-        <h3>Pass 3 — LLM (optional)</h3>
-        <p>Tools that still have no edges or only low-confidence ones get a second look. We send the tool’s name, description, and params to a model (Gemini via OpenRouter) and ask: which other tools in this list can provide the data this one needs? The model returns source/target/param; we filter out self-loops and invalid slugs. Those edges are <strong>low</strong> confidence but often correct—the kind of thing that’s obvious to a reader of docs but tedious to hardcode.</p>
-        <p>After that we compute <code>userProvided</code> per node: required inputs that no edge satisfies. That’s the “ask the user or the orchestrator” list.</p>
-
-        <h2>Cycles and DAGs</h2>
-        <p>Execution order only makes sense if the graph is a DAG. We strip self-loops and two-node mutual cycles. Deeper cycles (e.g. A→B→C→A) are left for a follow-up; if you enable the LLM pass, running a full cycle-break pass before saving is on the roadmap.</p>
-
-        <h2>Outputs</h2>
-        <ul>
-            <li><strong><code>dependency_graph.json</code></strong> — Nodes (slug, name, service, <code>userProvided</code>) and edges (source, target, param, method, confidence). Enough to drive an orchestrator or “what should I run first?” logic.</li>
-            <li><strong><code>graph.html</code></strong> — Cytoscape.js viz: filter by service, search, click a node for details, focus a 2-hop neighborhood. Edges colored by method (description_ref / param_match / llm); nodes with user-provided inputs get a dashed border.</li>
-        </ul>
-
-        <h2>Decisions we’d make again</h2>
-        <ul>
-            <li><strong>Three passes, explicit confidence.</strong> Description refs and param matching are deterministic and explainable; the LLM fills gaps. Tagging each edge with method and confidence makes it easy to tune or disable a pass.</li>
-            <li><strong>userProvided on the node.</strong> Knowing “this tool still needs X and Y from outside” is as important as the edges. We compute it once from the final edge set.</li>
-            <li><strong>Same-service preference in param matching.</strong> Reduces false cross-toolkit links (e.g. a generic “id” field) while still allowing safe cross-service IDs where it matters.</li>
-        </ul>
-
-        <h2>What’s next</h2>
-        <p>Full cycle removal after the LLM pass so the saved graph is always a DAG; topological sort validation before write; unit tests for extract, resolve, and user-inputs; and a bit more robustness around the LLM (retries, timeouts, schema validation). The viz could gain an “execution order” view from a topological sort, or export a subgraph/CSV for reporting.</p>
+        <p>I built a pipeline that turned Composio’s Google Super and GitHub tool schemas into a dependency graph: nodes are tools, edges are “tool A can satisfy an input of tool B.” A three-pass resolution (description refs, param matching, optional LLM) inferred dependencies. I produced JSON plus an interactive Cytoscape viz.</p>
 
         <hr />
-        <p style="color: #666; font-size: 0.95rem;">The code can be accessed here: <a href="https://github.com/jasroopdhingra/composio-dependency-graph">https://github.com/jasroopdhingra/composio-dependency-graph</a>. Run <code>bun run src/index.ts</code>, open <code>graph.html</code>, and explore. If you’re wiring agents to Composio tools, this graph is the map your orchestrator didn’t have.</p>
+
+        <p>In agentic flows, actions often depend on other actions. <code>GMAIL_REPLY_TO_THREAD</code> needs a <code>thread_id</code>; you get it from <code>GMAIL_LIST_THREADS</code> or another tool. The agent must either run something else first or ask the user. Without a map of which tools provide which inputs, that choice is guesswork. I wanted one artifact: a graph (nodes = tools, edges = “source output fills target input”) for <a href="https://docs.composio.dev/toolkits/googlesuper" target="_blank" rel="noopener">Google Super</a> and <a href="https://docs.composio.dev/toolkits/github" target="_blank" rel="noopener">GitHub</a>, as data plus a viz.</p>
+
+        <hr />
+
+        <p>The pipeline fetched tools from the Composio API, extracted params and descriptions, resolved dependencies in three passes, computed “user-provided” inputs (required params no edge satisfies), then wrote <code>dependency_graph.json</code> and generated <code>graph.html</code>. Run it with Bun: <code>bun run src/index.ts</code>. Flags: <code>--skip-fetch</code>, <code>--no-llm</code>, <code>--skip-viz</code>.</p>
+
+        <hr />
+
+        <p>I inferred edges from schemas, not from explicit “tool X depends on Y” in the API. Pass 1: if a param or tool description mentioned another tool by name, I added an edge (high confidence). Pass 2: I normalized names and matched output fields to required inputs; same-service preferred, cross-service only for known-safe IDs (spreadsheet, thread, calendar). Medium confidence. Pass 3 (optional): for tools with no or only low-confidence edges, I asked an LLM which tools in the list could provide the data, then filtered self-loops and invalid slugs. Low confidence but often correct. Then I computed <code>userProvided</code> per node—required inputs no edge satisfied—the “ask the user or orchestrator” list.</p>
+
+        <p>Execution order required a DAG. I stripped self-loops and two-node mutual cycles. I left deeper cycles for later; with the LLM pass, a full cycle-break before saving stayed on my roadmap.</p>
+
+        <hr />
+
+        <p>I wrote <code>dependency_graph.json</code> — nodes (slug, name, service, userProvided) and edges (source, target, param, method, confidence). <code>graph.html</code> is a Cytoscape viz: filter by service, search, click for details, focus 2-hop neighborhood; edges colored by method, nodes with user-provided inputs get a dashed border.</p>
+
+        <hr />
+
+        <p>Key Decisions: three passes with explicit confidence so you can tune or disable a pass; userProvided on the node so “what’s still needed from outside” is explicit; same-service preference in param matching to cut false cross-toolkit links.</p>
+
+        <p>Next Steps: full cycle removal after LLM so the graph is always a DAG, a topological sort check before save, unit tests for extract/resolve/user-inputs, LLM retries and validation, and an “execution order” or export view in the viz.</p>
+
+        <hr />
+
+        <p>You can access the code here: <a href="https://github.com/jasroopdhingra/composio-dependency-graph">https://github.com/jasroopdhingra/composio-dependency-graph</a>. Run <code>bun run src/index.ts</code>, open <code>graph.html</code>, and explore.</p>
     </div>
 </body>
 </html>
