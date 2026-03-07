@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:site_name" content="jasroop dhingra">
-    <meta property="og:title" content="Oscar Guidelines: Scraper + Criteria Tree Explorer">
+    <meta property="og:title" content="Scraper + Criteria Tree Explorer">
     <meta property="og:type" content="website">
     <meta property="og:description" content="A full-stack pipeline that turns Oscar Health medical guideline PDFs into browsable decision trees. Discover, download, structure with an LLM, browse in a React UI.">
     <meta property="og:url" content="https://jasroop.me">
@@ -18,6 +18,10 @@
             line-height: 1.4;
             margin: 0;
             padding: 0;
+        }
+        h1, h2, p, li, a, code {
+            font-size: 18px;
+            font-weight: normal;
         }
         .content {
             margin-left: 20px;
@@ -42,63 +46,83 @@
             border-top: 1px solid #e0e0e0;
             margin: 1.5rem 0;
         }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1rem 0;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+            font-size: 18px;
+            font-weight: normal;
+        }
     </style>
 </head>
 <body>
     <div class="content">
         <h1>Oscar Guidelines: Scraper + Criteria Tree Explorer</h1>
-        <p>A full-stack pipeline that turns Oscar Health medical guideline PDFs into browsable decision trees.</p>
+        <p>This project scrapes Oscar Health's clinical guideline PDFs, extracts text, and turns "initial" medical necessity criteria into structured JSON decision trees you can browse in a React UI. Code: <a href="https://github.com/jasroopdhingra/oscar">github.com/jasroopdhingra/oscar</a></p>
 
-        <p>
-            <strong>What it does:</strong> Discovers PDFs from Oscar's clinical guidelines page, downloads them, extracts text, and uses an LLM (Groq / Llama 3.3 70B) to turn "initial" medical necessity criteria into structured JSON decision trees. A React UI lets you browse policies and expand/collapse AND/OR criteria.
-        </p>
+        <p>The system lets you:</p>
+        <ul>
+            <li>Discover all PDF links from Oscar's guidelines page without DOM scraping (parse <code class="space">__NEXT_DATA__</code> from the Next.js app).</li>
+            <li>Download PDFs to disk with two-step URL resolution: listing URLs are Next routes; the real file URL comes from each policy page's embedded JSON (Contentful CDN).</li>
+            <li>Extract text with pdfplumber (first 15 pages, 30,000 characters max), then heuristically slice to the "initial" criteria section when headers like "Initial Authorization Criteria" and "Continuation of Therapy Criteria" are present.</li>
+            <li>Structure that text with Groq (Llama 3.3 70B) in JSON mode; validate every response against a Pydantic <code class="space">CriteriaTree</code> schema; store either the tree or the validation error.</li>
+            <li>Browse policies and criteria in the UI: filter by structured vs unstructured, open a policy, expand and collapse nodes; AND and OR are shown as distinct badges.</li>
+        </ul>
 
-        <p>
-            Code: <a href="https://github.com/jasroopdhingra/oscar">github.com/jasroopdhingra/oscar</a>
-        </p>
+        <h2>How it works</h2>
+        <p>The pipeline runs in three phases. Discover upserts policies into SQLite by unique <code class="space">pdf_url</code> (from <code class="space">__NEXT_DATA__</code>). Download fetches each policy page, reads the Contentful PDF URL from the same JSON, streams the file to <code class="space">backend/pdfs/{policy_id}.pdf</code>, and records status; 1.5 second delay between requests. Structure selects policies that have a successful download but no valid structured output yet, runs extract then LLM, validates with Pydantic, and writes to <code class="space">structured_policies</code>; 3 second delay between LLM calls and a cap of 10 policies per run (configurable). Each step is idempotent: discover uses <code class="space">INSERT OR IGNORE</code>, download and structure skip rows that already succeeded.</p>
 
-        <hr>
+        <h2>Components</h2>
+        <table>
+            <tr>
+                <th>Component</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td>Scraper</td>
+                <td>Fetch guidelines page; parse <code class="space">__NEXT_DATA__</code>; collect links from Contentful modules (Upcoming Policy Changes, Medical Guidelines, Adopted Guidelines); upsert into <code class="space">policies</code>.</td>
+            </tr>
+            <tr>
+                <td>Downloader</td>
+                <td>Per policy: fetch policy page, extract PDF URL from JSON, stream to disk; tenacity retries (3 attempts); record <code class="space">Download</code> with <code class="space">stored_location</code> or <code class="space">error</code>.</td>
+            </tr>
+            <tr>
+                <td>Extractor</td>
+                <td>pdfplumber text extraction (max 15 pages, 30k chars). Regex for initial vs continuation section headers; return only the initial slice or full text if no match.</td>
+            </tr>
+            <tr>
+                <td>Structurer</td>
+                <td>Groq chat completion with system prompt (schema + "initial only" rules), user prompt (title + filtered text); <code class="space">response_format: json_object</code>; Pydantic <code class="space">CriteriaTree</code> validation; store result or <code class="space">validation_error</code>.</td>
+            </tr>
+        </table>
+
+        <h2>Schema and initial-only logic</h2>
+        <p>The target JSON has <code class="space">title</code>, <code class="space">insurance_name</code> ("Oscar Health"), and a single root <code class="space">rules</code> object. Each node has <code class="space">rule_id</code> (dot notation: 1, 1.1, 1.2.1), <code class="space">rule_text</code>, and optionally <code class="space">operator</code> (AND or OR) and <code class="space">rules</code> (child array). Leaf nodes have only <code class="space">rule_id</code> and <code class="space">rule_text</code>.</p>
+        <p>Initial-only is enforced in two places. In the extractor: match patterns like "Initial Authorization Criteria", "Initial Criteria", "Continuation of Therapy Criteria", "Continuation/Renewal Criteria"; if both initial and continuation are found, keep only the text between them; if only initial, keep from that header to end. In the structurer: the system prompt states that the model must output only initial authorization/medical necessity criteria and must not include continuation, renewal, exclusions, or appendices. If the document has no such section headers, the full extracted text is sent and the prompt alone defines the scope.</p>
+        <p>Known limits: guidelines that use non-standard headers (e.g. "First Authorization") are not pre-filtered and depend on the LLM. PDFs longer than 15 pages or 30,000 characters are truncated; if initial criteria fall beyond that, they are missed.</p>
 
         <h2>How it was built</h2>
-        <p>
-            Backend first: FastAPI app, SQLAlchemy models (policies, downloads, structured_policies), and SQLite. Then the pipeline services in order — scraper to discover PDF links from the guidelines page, downloader to fetch and store files with retries and throttling, extractor (pdfplumber + initial-section regex), and structurer (Groq, JSON mode, Pydantic validation). A CLI (<code class="space">run_pipeline.py</code>) runs discover → download → structure in one go or step-by-step; API routes expose the same triggers plus GETs for policy list and detail.
-        </p>
-        <p>
-            Frontend next: React + Vite + TypeScript, Tailwind. Policies list with filter tabs (All / Structured / Unstructured), then policy detail page and a recursive criteria tree component with AND/OR badges and expand/collapse. API client talks to the backend; proxy in Vite for local dev. After that, full pipeline run to populate the DB and structure 10+ guidelines, then README and docs updated with setup, run instructions, and the initial-only logic.
-        </p>
+        <p>Backend first: FastAPI app, SQLAlchemy models (Policy, Download, StructuredPolicy), SQLite. Then scraper, downloader, extractor, structurer; then <code class="space">run_pipeline.py</code> CLI (discover, download, structure, or all) and API routes (<code class="space">POST /api/pipeline/discover</code>, <code class="space">download</code>, <code class="space">structure</code>; <code class="space">GET /api/policies</code>, <code class="space">GET /api/policies/{id}</code>). Frontend: React, Vite, TypeScript, Tailwind; policies list with tabs (All / Structured / Unstructured), policy detail page, recursive <code class="space">CriteriaTree</code> with expand/collapse and AND/OR badges; Vite proxy to backend. Full pipeline run to populate and structure at least 10 guidelines; README updated with setup, run commands, and initial-only logic.</p>
 
-        <h2>Pipeline</h2>
+        <h2>Getting started</h2>
         <ol>
-            <li><strong>Discover</strong> — Scrape the guidelines page; parse Next.js <code class="space">__NEXT_DATA__</code> to get PDF links and metadata. Upsert into SQLite by <code class="space">pdf_url</code>.</li>
-            <li><strong>Download</strong> — Resolve each listing URL to the real PDF (Contentful CDN) via the policy page's <code class="space">__NEXT_DATA__</code>. Stream to disk with retries and throttling.</li>
-            <li><strong>Structure</strong> — Extract text with pdfplumber (first 15 pages / 30k chars). Filter to "initial" criteria only (regex), then send to the LLM with a strict schema. Validate with Pydantic; store JSON or validation errors.</li>
+            <li>Backend: <code class="space">cd backend</code>, <code class="space">python3 -m venv venv</code>, <code class="space">source venv/bin/activate</code>, <code class="space">pip install -r requirements.txt</code>. Copy <code class="space">.env.example</code> to <code class="space">.env</code> and set <code class="space">GROQ_API_KEY</code>.</li>
+            <li>Frontend: <code class="space">cd frontend</code>, <code class="space">npm install</code>.</li>
+            <li>Run pipeline: <code class="space">cd backend && python run_pipeline.py</code> (or <code class="space">run_pipeline.py discover</code>, <code class="space">download</code>, <code class="space">structure</code> separately).</li>
+            <li>Start API: <code class="space">uvicorn app.main:app --reload --port 8000</code>. Start UI: <code class="space">npm run dev</code> in frontend. Open http://localhost:5173.</li>
         </ol>
-
-        <h2>Initial-only logic</h2>
-        <p>
-            Guidelines often separate "Initial Authorization" from "Continuation/Renewal" criteria. Two layers:
-        </p>
-        <ul>
-            <li><strong>Layer 1</strong> — In the extractor: detect initial vs continuation section headers and slice the text so only the initial block is sent to the LLM.</li>
-            <li><strong>Layer 2</strong> — In the system prompt: instruct the model to output only initial criteria and to ignore continuation, exclusions, and appendices.</li>
-        </ul>
-        <p>
-            If no such headers exist, the full extracted text is sent and the prompt alone enforces the scope.
-        </p>
-
-        <h2>Stack</h2>
-        <ul>
-            <li><strong>Backend:</strong> FastAPI, SQLAlchemy (SQLite), Pydantic. Services: scraper, downloader, extractor, structurer (Groq, JSON mode).</li>
-            <li><strong>Frontend:</strong> React, Vite, TypeScript, Tailwind. Policies list (filter by structured/unstructured), policy detail, recursive criteria tree with AND/OR badges and expand/collapse.</li>
-            <li><strong>Run:</strong> <code class="space">python run_pipeline.py</code> for discover → download → structure; or POST to <code class="space">/api/pipeline/*</code>. UI: backend on 8000, frontend on 5173.</li>
-        </ul>
 
         <h2>Decisions</h2>
         <ul>
-            <li><code class="space">__NEXT_DATA__</code> over DOM scraping — stable, structured access to links and content.</li>
-            <li>Two-step PDF URL resolution — listing links are Next routes; the actual file URL lives in the policy page's JSON.</li>
-            <li>Pydantic validation on every LLM response — invalid output is stored in <code class="space">validation_error</code> instead of overwriting.</li>
-            <li>Idempotent steps — discover by unique URL; download and structure skip already-succeeded rows.</li>
+            <li><code class="space">__NEXT_DATA__</code> over DOM scraping: one JSON payload gives all links and metadata; no dependency on CSS or layout.</li>
+            <li>Two-step PDF URL resolution: listing links point at Next routes; the actual PDF URL is in the policy page's <code class="space">__NEXT_DATA__</code> (Contentful).</li>
+            <li>Pydantic validation on every LLM response: invalid JSON or schema violations are stored in <code class="space">validation_error</code>; no silent overwrite.</li>
+            <li>Idempotency: discover by unique <code class="space">pdf_url</code>; download and structure skip rows that already have a successful result.</li>
         </ul>
 
         <p>
