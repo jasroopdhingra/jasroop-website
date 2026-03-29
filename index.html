@@ -6,8 +6,8 @@
 
   <!-- Primary SEO -->
   <title>Jasroop Dhingra — Builder. Reader. Nerd who ships.</title>
-  <meta name="description" content="Jasroop Dhingra is a growth engineer and founding engineer (Shapes, 30M+ users; Margin). CS grad from Boston College. Currently looking for engineering roles in SF and NYC." />
-  <meta name="keywords" content="Jasroop Dhingra, software engineer, growth engineer, Boston College, Shapes, founding engineer, new grad engineer" />
+  <meta name="description" content="Jasroop Dhingra is a Member of Technical Staff at Hanover Park. Founding engineer (Shapes, 30M+ users; Margin). CS grad from Boston College. Based in NYC." />
+  <meta name="keywords" content="Jasroop Dhingra, software engineer, Hanover Park, Boston College, Shapes, founding engineer, Margin" />
   <meta name="author" content="Jasroop Dhingra" />
   <link rel="canonical" href="https://jasroop.me/" />
 
@@ -15,7 +15,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://jasroop.me/" />
   <meta property="og:title" content="Jasroop Dhingra — Builder. Reader. Nerd who ships." />
-  <meta property="og:description" content="Growth engineer. Founding engineer at Shapes (30M+ users) and Margin. CS grad from Boston College. Currently looking for roles in SF and NYC." />
+  <meta property="og:description" content="Member of Technical Staff at Hanover Park. Founding engineer at Shapes (30M+ users) and Margin. CS grad from Boston College. Based in NYC." />
   <meta property="og:image" content="https://jasroop.me/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -27,7 +27,7 @@
   <meta name="twitter:site" content="@jasroopdhingra" />
   <meta name="twitter:creator" content="@jasroopdhingra" />
   <meta name="twitter:title" content="Jasroop Dhingra — Builder. Reader. Nerd who ships." />
-  <meta name="twitter:description" content="Growth engineer. Founding engineer at Shapes (30M+ users) and Margin. CS grad from Boston College." />
+  <meta name="twitter:description" content="Member of Technical Staff at Hanover Park. Founding engineer at Shapes (30M+ users) and Margin. CS grad from Boston College." />
   <meta name="twitter:image" content="https://jasroop.me/og.png" />
 
   <!-- Favicon -->
@@ -136,12 +136,12 @@
     <div class="name">Jasroop Dhingra</div>
     <div class="loc-pill">
       <div class="pulse"></div>
-      <span id="loc-text">Boston &rarr; San Francisco (soon)</span>
+      <span id="loc-text">New York City</span>
     </div>
   </div>
 
   <div class="headline">Builder. Reader. Nerd who ships.</div>
-  <div class="sub">CS grad. Founding engineer twice over.</div>
+  <div class="sub">Member of Technical Staff at <a href="https://www.hanoverpark.com/" target="_blank">Hanover Park</a>.</div>
 
   <nav>
     <a href="#work">Work</a>
@@ -165,7 +165,8 @@
       at a company where speed was the only strategy.
     </p>
     <p>
-      Late 2025 I did it again at Margin. Now I want to do it somewhere bigger.
+      Late 2025 I did it again at Margin. Now I'm a Member of Technical Staff at
+      <a href="https://www.hanoverpark.com/" target="_blank">Hanover Park</a>.
       When I'm not at a computer I'm reading. I'm currently on book 131:
       <a href="https://www.goodreads.com/book/show/208931300-intermezzo" target="_blank"><em>Intermezzo</em></a>.
     </p>
@@ -176,6 +177,7 @@
   <section id="work">
     <h2>Experience</h2>
     <ul>
+      <li><span class="ll">Member of Technical Staff, <a href="https://www.hanoverpark.com/" target="_blank">Hanover Park</a></span><span class="lr">2026</span></li>
       <li><span class="ll">Founding Engineer, Shapes Inc</span><span class="lr">2024</span></li>
       <li><span class="ll">Founding Engineer, Margin</span><span class="lr">Late 2025</span></li>
       <li><span class="ll">ML Research, Boston College &mdash; protein-aptamer model, 97.96% accuracy</span><span class="lr">2023&ndash;2024</span></li>
@@ -251,8 +253,8 @@
   <section id="now">
     <h2>Now</h2>
     <ul>
-      <li><span class="ll">Looking for engineering roles</span><span class="lr">Feb 2026</span></li>
-      <li><span class="ll" id="moving-text">Moving to San Francisco</span><span class="lr">soon</span></li>
+      <li><span class="ll">Member of Technical Staff at <a href="https://www.hanoverpark.com/" target="_blank">Hanover Park</a></span><span class="lr">Mar 2026</span></li>
+      <li><span class="ll">Based in New York City</span><span class="lr"></span></li>
       <li><span class="ll">Trying to hit 45 books this year</span><span class="lr">3 down, 42 to go</span></li>
     </ul>
   </section>
@@ -275,33 +277,6 @@
 </div>
 
 <script>
-fetch('https://ipapi.co/json/')
-  .then(r => r.json())
-  .then(data => {
-    const tz = data.timezone || '';
-    const region = data.region || '';
-    const eastCoastTZs = [
-      'America/New_York','America/Detroit','America/Indiana/Indianapolis',
-      'America/Kentucky/Louisville','America/Toronto','America/Montreal'
-    ];
-    const eastCoastStates = [
-      'New York','New Jersey','Connecticut','Massachusetts','Pennsylvania',
-      'Virginia','Maryland','North Carolina','South Carolina','Georgia',
-      'Florida','Maine','New Hampshire','Vermont','Rhode Island','Delaware',
-      'Washington D.C.','West Virginia','District of Columbia'
-    ];
-    const isEast = eastCoastTZs.includes(tz) || eastCoastStates.includes(region);
-
-    // loc pill
-    const locEl = document.getElementById('loc-text');
-    if (locEl) locEl.innerHTML = isEast ? 'Boston &rarr; New York City (soon)' : 'Boston &rarr; San Francisco (soon)';
-
-    // now section moving line
-    const movingEl = document.getElementById('moving-text');
-    if (movingEl) movingEl.textContent = isEast ? 'Moving to New York City' : 'Moving to San Francisco';
-  })
-  .catch(() => {});
-
 // bubbles
 const canvas = document.getElementById('bubbles');
 const ctx = canvas.getContext('2d');
