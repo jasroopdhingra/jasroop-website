@@ -16,6 +16,10 @@
 html { -webkit-text-size-adjust: 100%; }
 
 body {
+  /* content-box, same as the Blot layout this follows.
+     width is the text column. The left padding is the sidebar slot.
+     border-box would swallow that padding and leave a 133px column. */
+  box-sizing: content-box;
   margin: 6.5em auto 4em;
   padding: 0 72px 0 220px;
   width: 425px;
