@@ -376,5 +376,6 @@
 
   if (labelEl) labelEl.textContent = defaultLabel;
   layout();
+  renderFrame();
   start();
 })();
