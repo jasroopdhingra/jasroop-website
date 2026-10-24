@@ -31,10 +31,10 @@
   COLOR[OCEAN] = "#6d97bf";
   COLOR[LAND] = "#1f6b43";
   COLOR[VISITED] = "#c9840a";
-  COLOR[ARC] = "#ef5b22";
-  COLOR[HEAD] = "#ff2a00";
-  COLOR[CITY] = "#d00000";
-  COLOR[HOME] = "#9a3412";
+  COLOR[ARC] = "#FF2D95";
+  COLOR[HEAD] = "#FF1493";
+  COLOR[CITY] = "#FF1493";
+  COLOR[HOME] = "#FF1493";
 
   function placeLabel(p) {
     var where = p.name === p.country ? p.name : p.name + ", " + p.country;
@@ -335,7 +335,7 @@
     ctx.lineWidth = 1.8;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    ctx.strokeStyle = "#ff4d1a";
+    ctx.strokeStyle = "#FF1493";
     for (var bi = 0; bi < arcs.length; bi++) {
       var route = arcs[bi];
       ctx.beginPath();
@@ -360,7 +360,7 @@
         var hi = (headStep + route.phase) % route.pts.length;
         var hp = screenOf(route.pts[hi], 0.08);
         if (hp) {
-          ctx.fillStyle = "#ff1a00";
+          ctx.fillStyle = "#FF2D95";
           ctx.beginPath();
           ctx.arc(hp.x, hp.y, 2.7, 0, Math.PI * 2);
           ctx.fill();
@@ -371,7 +371,7 @@
     for (var q = 0; q < places.length; q++) {
       var pin = screenOf(latLonVec(places[q].lat, places[q].lon), 0);
       if (!pin) continue;
-      ctx.fillStyle = places[q].home ? "#9a3412" : "#e10600";
+      ctx.fillStyle = places[q].home ? "#FF1493" : "#FF2D95";
       ctx.beginPath();
       ctx.arc(pin.x, pin.y, places[q].home ? 3.5 : 2.7, 0, Math.PI * 2);
       ctx.fill();
