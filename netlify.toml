@@ -22,3 +22,27 @@
   from = "/writings/writings.html"
   to = "/notes.html"
   status = 301
+
+[[redirects]]
+  from = "/Jasroop Dhingra Resume 2026.pdf"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/Jasroop%20Dhingra%20Resume%202026.pdf"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/assets/Jasroop Dhingra Resume 2026.pdf"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/assets/Jasroop%20Dhingra%20Resume%202026.pdf"
+  to = "/"
+  status = 301
+  force = true
