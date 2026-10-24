@@ -2,3 +2,23 @@
   base = "/"
   publish = "/"
   command = ""
+
+[[redirects]]
+  from = "/work.html"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/connect.html"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/books/books.html"
+  to = "/favorites.html"
+  status = 301
+
+[[redirects]]
+  from = "/writings/writings.html"
+  to = "/notes.html"
+  status = 301
