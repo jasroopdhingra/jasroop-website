@@ -1,4 +1,4 @@
-/* ASCII globe for travels.html.
+/* Character globe for travels.html.
    Drag, touch, or arrow keys rotate it. It spins until you grab it.
    Places come from /data/travels.js. Coasts come from /assets/landmask.js.
    The visible list under the canvas is the text alternative. */
@@ -10,6 +10,32 @@
   var listEl = document.getElementById("place-list");
   var labelEl = document.getElementById("globe-label");
 
+  var OCEAN = 1;
+  var LAND = 2;
+  var VISITED = 3;
+  var ARC = 4;
+  var HEAD = 5;
+  var CITY = 6;
+  var HOME = 7;
+
+  var GLYPH = {};
+  GLYPH[OCEAN] = ".";
+  GLYPH[LAND] = "+";
+  GLYPH[VISITED] = "+";
+  GLYPH[ARC] = "-";
+  GLYPH[HEAD] = ">";
+  GLYPH[CITY] = "*";
+  GLYPH[HOME] = "@";
+
+  var COLOR = {};
+  COLOR[OCEAN] = "#6d97bf";
+  COLOR[LAND] = "#1f6b43";
+  COLOR[VISITED] = "#c9840a";
+  COLOR[ARC] = "#ef5b22";
+  COLOR[HEAD] = "#ff2a00";
+  COLOR[CITY] = "#d00000";
+  COLOR[HOME] = "#9a3412";
+
   function placeLabel(p) {
     var where = p.name === p.country ? p.name : p.name + ", " + p.country;
     return p.home ? where + " (home)" : where;
@@ -18,6 +44,8 @@
   var countries = {};
   for (var i = 0; i < places.length; i++) {
     if (places[i].country) countries[places[i].country] = true;
+    places[i]._lat = places[i].lat * Math.PI / 180;
+    places[i]._lon = places[i].lon * Math.PI / 180;
   }
   var countryCount = Object.keys(countries).length;
   if (countEl) {
@@ -54,6 +82,24 @@
     return (maskBytes[idx >> 3] >> (7 - (idx & 7))) & 1;
   }
 
+  var visitLimit = Math.sin((8 * Math.PI / 180) / 2);
+  visitLimit = visitLimit * visitLimit;
+
+  function nearVisit(lat, lon) {
+    var latR = lat * Math.PI / 180;
+    var lonR = lon * Math.PI / 180;
+    var cosLat = Math.cos(latR);
+    for (var i = 0; i < places.length; i++) {
+      var dLat = latR - places[i]._lat;
+      var dLon = lonR - places[i]._lon;
+      var sLat = Math.sin(dLat / 2);
+      var sLon = Math.sin(dLon / 2);
+      var a = sLat * sLat + cosLat * Math.cos(places[i]._lat) * sLon * sLon;
+      if (a < visitLimit) return true;
+    }
+    return false;
+  }
+
   var yaw = (-32 * Math.PI) / 180;
   var pitch = 0.22;
   var dragging = false;
@@ -70,12 +116,11 @@
   var charW = 8;
   var charH = 14;
   var dpr = 1;
-  var fontSize = 13;
+  var fontSize = 12;
   var ox = 0;
   var oy = 0;
   var radius = 100;
   var cityHits = [];
-  var defaultLabel = "Drag to turn it. Arrow keys work too.";
 
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
 
@@ -124,14 +169,12 @@
     for (var a = 0; a < places.length; a++) {
       if (places[a].home) continue;
       var dest = latLonVec(places[a].lat, places[a].lon);
-      var steps = 32;
+      var steps = 28;
       var pts = [];
       for (var s = 0; s <= steps; s++) pts.push(slerp(homeV, dest, s / steps));
-      arcs.push({ pts: pts, phase: (a * 4) % steps });
+      arcs.push({ pts: pts, phase: (a * 3) % steps });
     }
   }
-
-  var LAND = ".:-=+*#";
 
   function layout() {
     var width = canvas.clientWidth;
@@ -139,18 +182,18 @@
     laidWidth = width;
     cssSize = Math.floor(width);
     dpr = Math.min(2, window.devicePixelRatio || 1);
-    fontSize = cssSize < 380 ? 12 : 13;
+    fontSize = cssSize < 380 ? 11 : 12;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.font = fontSize + 'px "Courier New", ui-monospace, monospace';
     charW = ctx.measureText("M").width || fontSize * 0.62;
-    charH = Math.ceil(fontSize * 1.15);
+    charH = Math.ceil(fontSize * 1.12);
     cols = Math.max(20, Math.floor(cssSize / charW));
     rows = Math.max(12, Math.floor(cssSize / charH));
     var gridW = cols * charW;
     var gridH = rows * charH;
     ox = (cssSize - gridW) / 2;
     oy = (cssSize - gridH) / 2;
-    radius = Math.min(gridW, gridH) * 0.47;
+    radius = Math.min(gridW, gridH) * 0.46;
     canvas.width = Math.floor(cssSize * dpr);
     canvas.height = Math.floor(cssSize * dpr);
     return true;
@@ -168,11 +211,12 @@
     return { c: c, r: r };
   }
 
-  function stamp(cells, pri, c, r, ch, pr) {
+  function stamp(cells, kinds, pri, c, r, kind, pr) {
     if (c < 0 || r < 0 || c >= cols || r >= rows) return false;
     var i = r * cols + c;
     if (pri[i] > pr) return false;
-    cells[i] = ch;
+    cells[i] = GLYPH[kind];
+    kinds[i] = kind;
     pri[i] = pr;
     return true;
   }
@@ -182,13 +226,8 @@
       if (!layout()) return;
     }
     var cells = new Array(rows * cols);
+    var kinds = new Uint8Array(rows * cols);
     var pri = new Uint8Array(rows * cols);
-    for (var i = 0; i < cells.length; i++) cells[i] = " ";
-
-    var lightX = -0.3;
-    var lightY = 0.55;
-    var lightZ = 0.78;
-    var lightLen = Math.hypot(lightX, lightY, lightZ);
 
     for (var r = 0; r < rows; r++) {
       for (var c = 0; c < cols; c++) {
@@ -202,32 +241,31 @@
         var world = unrot([x, y, z]);
         var lat = Math.asin(Math.max(-1, Math.min(1, world[1]))) * 180 / Math.PI;
         var lon = Math.atan2(world[0], world[2]) * 180 / Math.PI;
-        var land = isLand(lat, lon);
-        var ndotl = (x * lightX + y * lightY + z * lightZ) / lightLen;
-        if (ndotl < 0) ndotl = 0;
-        var ch;
-        if (!land) {
-          ch = z < 0.2 || ndotl > 0.72 ? "." : " ";
-        } else {
-          var idx = 1 + Math.floor(ndotl * (LAND.length - 2));
-          if (idx < 1) idx = 1;
-          if (idx > LAND.length - 1) idx = LAND.length - 1;
-          ch = LAND.charAt(idx);
+        var i = r * cols + c;
+        if (!isLand(lat, lon)) {
+          if (((r + c) & 1) === 0) {
+            cells[i] = GLYPH[OCEAN];
+            kinds[i] = OCEAN;
+            pri[i] = 1;
+          }
+          continue;
         }
-        cells[r * cols + c] = ch;
-        pri[r * cols + c] = 1;
+        var kind = nearVisit(lat, lon) ? VISITED : LAND;
+        cells[i] = GLYPH[kind];
+        kinds[i] = kind;
+        pri[i] = 1;
       }
     }
 
-    var headStep = reduce ? -1 : (frame + Math.floor(performance.now() / 80));
+    var headStep = reduce ? -1 : (frame + Math.floor(performance.now() / 70));
     for (var ai = 0; ai < arcs.length; ai++) {
       var arc = arcs[ai];
       var head = headStep < 0 ? -1 : (headStep + arc.phase) % arc.pts.length;
       for (var s = 0; s < arc.pts.length; s++) {
-        var hit = project(arc.pts[s], 0.07);
+        var hit = project(arc.pts[s], 0.08);
         if (!hit) continue;
-        if (s === head) stamp(cells, pri, hit.c, hit.r, ">", 3);
-        else stamp(cells, pri, hit.c, hit.r, "'", 2);
+        if (s === head) stamp(cells, kinds, pri, hit.c, hit.r, HEAD, 3);
+        else if ((s & 1) === 0) stamp(cells, kinds, pri, hit.c, hit.r, ARC, 2);
       }
     }
 
@@ -235,13 +273,13 @@
     for (var p = 0; p < places.length; p++) {
       var spot = project(latLonVec(places[p].lat, places[p].lon), 0);
       if (!spot) continue;
-      var glyph = places[p].home ? "@" : "*";
+      var kind = places[p].home ? HOME : CITY;
       var priority = places[p].home ? 5 : 4;
-      var placed = stamp(cells, pri, spot.c, spot.r, glyph, priority);
+      var placed = stamp(cells, kinds, pri, spot.c, spot.r, kind, priority);
       if (!placed) {
         var neighbors = [[1, 0], [-1, 0], [0, 1], [0, -1]];
         for (var k = 0; k < neighbors.length; k++) {
-          if (stamp(cells, pri, spot.c + neighbors[k][0], spot.r + neighbors[k][1], glyph, priority)) {
+          if (stamp(cells, kinds, pri, spot.c + neighbors[k][0], spot.r + neighbors[k][1], kind, priority)) {
             spot = { c: spot.c + neighbors[k][0], r: spot.r + neighbors[k][1] };
             placed = true;
             break;
@@ -251,17 +289,100 @@
       if (placed) cityHits.push({ c: spot.c, r: spot.r, place: places[p] });
     }
 
+    var cx = cssSize / 2;
+    var cy = cssSize / 2;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.fillStyle = "#fff";
     ctx.fillRect(0, 0, cssSize, cssSize);
-    ctx.fillStyle = "#111";
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.fillStyle = "#e5f2fa";
+    ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
     ctx.font = fontSize + 'px "Courier New", ui-monospace, monospace';
     ctx.textBaseline = "top";
     for (var row = 0; row < rows; row++) {
-      var line = "";
-      for (var col = 0; col < cols; col++) line += cells[row * cols + col];
-      ctx.fillText(line, ox, oy + row * charH);
+      var col = 0;
+      while (col < cols) {
+        var kindAt = kinds[row * cols + col];
+        if (!kindAt) {
+          col++;
+          continue;
+        }
+        var start = col;
+        var text = cells[row * cols + col];
+        col++;
+        while (col < cols && kinds[row * cols + col] === kindAt) {
+          text += cells[row * cols + col];
+          col++;
+        }
+        ctx.fillStyle = COLOR[kindAt];
+        ctx.fillText(text, ox + start * charW, oy + row * charH);
+      }
     }
+
+    function screenOf(world, lift) {
+      var v = rot(world);
+      if (v[2] <= 0.05) return null;
+      var scale = 1 + (lift || 0);
+      return {
+        x: v[0] * radius * scale + cssSize / 2,
+        y: cssSize / 2 - v[1] * radius * scale
+      };
+    }
+
+    ctx.lineWidth = 1.8;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = "#ff4d1a";
+    for (var bi = 0; bi < arcs.length; bi++) {
+      var route = arcs[bi];
+      ctx.beginPath();
+      var pen = false;
+      for (var t = 0; t < route.pts.length; t++) {
+        var sp = screenOf(route.pts[t], 0.08);
+        if (!sp) {
+          if (pen) {
+            ctx.stroke();
+            ctx.beginPath();
+            pen = false;
+          }
+          continue;
+        }
+        if (!pen) {
+          ctx.moveTo(sp.x, sp.y);
+          pen = true;
+        } else ctx.lineTo(sp.x, sp.y);
+      }
+      if (pen) ctx.stroke();
+      if (headStep >= 0) {
+        var hi = (headStep + route.phase) % route.pts.length;
+        var hp = screenOf(route.pts[hi], 0.08);
+        if (hp) {
+          ctx.fillStyle = "#ff1a00";
+          ctx.beginPath();
+          ctx.arc(hp.x, hp.y, 2.7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    for (var q = 0; q < places.length; q++) {
+      var pin = screenOf(latLonVec(places[q].lat, places[q].lon), 0);
+      if (!pin) continue;
+      ctx.fillStyle = places[q].home ? "#9a3412" : "#e10600";
+      ctx.beginPath();
+      ctx.arc(pin.x, pin.y, places[q].home ? 3.5 : 2.7, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.strokeStyle = "#16324f";
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
 
     if (!reduce && !dragging && performance.now() > resumeAt) yaw += 0.0042;
     frame++;
@@ -289,7 +410,7 @@
         bestD = d;
       }
     }
-    labelEl.textContent = best ? placeLabel(best.place) : defaultLabel;
+    labelEl.textContent = best ? placeLabel(best.place) : "";
   }
 
   canvas.addEventListener("pointerdown", function (e) {
@@ -323,7 +444,7 @@
   canvas.addEventListener("pointerup", endDrag);
   canvas.addEventListener("pointercancel", endDrag);
   canvas.addEventListener("pointerleave", function () {
-    if (!dragging && labelEl) labelEl.textContent = defaultLabel;
+    if (!dragging && labelEl) labelEl.textContent = "";
   });
 
   canvas.addEventListener("keydown", function (e) {
@@ -374,7 +495,6 @@
     if (reduce) renderFrame();
   });
 
-  if (labelEl) labelEl.textContent = defaultLabel;
   layout();
   renderFrame();
   start();
