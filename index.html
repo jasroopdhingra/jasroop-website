@@ -1,305 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <!-- Primary SEO -->
-  <title>Jasroop Dhingra — Builder. Reader. Nerd who ships.</title>
-  <meta name="description" content="Jasroop Dhingra — software engineer based in NYC." />
-  <meta name="keywords" content="Jasroop Dhingra, software engineer, Hanover Park, Boston College, Shapes, founding engineer, Margin" />
-  <meta name="author" content="Jasroop Dhingra" />
-  <link rel="canonical" href="https://jasroop.me/" />
-
-  <!-- Open Graph (Facebook, LinkedIn, iMessage, Slack, Discord etc) -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://jasroop.me/" />
-  <meta property="og:title" content="Jasroop Dhingra — Builder. Reader. Nerd who ships." />
-  <meta property="og:description" content="Member of Technical Staff at Hanover Park. Founding engineer at Shapes (30M+ users) and Margin. CS grad from Boston College. Based in NYC." />
-  <meta property="og:image" content="https://jasroop.me/og.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:site_name" content="Jasroop Dhingra" />
-  <meta property="og:locale" content="en_US" />
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@jasroopdhingra" />
-  <meta name="twitter:creator" content="@jasroopdhingra" />
-  <meta name="twitter:title" content="Jasroop Dhingra — Builder. Reader. Nerd who ships." />
-  <meta name="twitter:description" content="Member of Technical Staff at Hanover Park. Founding engineer at Shapes (30M+ users) and Margin. CS grad from Boston College." />
-  <meta name="twitter:image" content="https://jasroop.me/og.png" />
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23f9f6f0'/><text x='16' y='23' font-size='20' text-anchor='middle' font-family='Georgia,serif' fill='%23b84a2a'>J</text></svg>">
-
-  <style>
-    :root {
-      --bg: #f9f6f0;
-      --text: #1c1510;
-      --muted: #9a8a76;
-      --accent: #b84a2a;
-      --border: #e0d8cc;
-      --card: #ffffff;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Georgia', serif;
-      font-size: 15.5px;
-      line-height: 1.8;
-      max-width: 660px;
-      margin: 0 auto;
-      padding: 80px 24px 120px;
-      position: relative;
-    }
-    #bubbles {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none; z-index: 0;
-    }
-    .wrap { position: relative; z-index: 1; }
-    .name-row {
-      display: flex; align-items: baseline;
-      justify-content: space-between; margin-bottom: 40px;
-    }
-    .name { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.06em; }
-    .loc-pill {
-      font-size: 0.72rem; color: var(--muted);
-      display: flex; align-items: center; gap: 5px;
-    }
-    .pulse {
-      width: 6px; height: 6px; background: #5aaa80;
-      border-radius: 50%; animation: pulse 2s infinite; flex-shrink: 0;
-    }
-    @keyframes pulse {
-      0%,100% { opacity:1; transform:scale(1); }
-      50% { opacity:.4; transform:scale(1.4); }
-    }
-    .headline { font-size: 1.55rem; font-weight: normal; line-height: 1.45; margin-bottom: 10px; color: var(--text); }
-    .sub { font-size: 0.95rem; color: var(--muted); margin-bottom: 48px; font-style: italic; }
-    nav { display: flex; gap: 24px; margin-bottom: 60px; font-size: 0.82rem; }
-    nav a { color: var(--muted); text-decoration: none; letter-spacing: 0.04em; transition: color .2s; border-bottom: none; }
-    nav a:hover { color: var(--accent); }
-    section { margin-bottom: 52px; }
-    h2 { font-size: 0.68rem; font-weight: normal; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); margin-bottom: 18px; }
-    p { color: #3a2e20; margin-bottom: 14px; }
-    hr { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
-    ul { list-style: none; }
-    ul li { padding: 11px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-    ul li:last-child { border-bottom: none; }
-    .ll { color: var(--text); }
-    .lr { color: var(--muted); font-size: 0.8rem; white-space: nowrap; font-style: italic; }
-    a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--border); transition: all .2s; }
-    a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-    .shelf-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 3px; padding: 20px 20px 16px; margin-bottom: 20px; }
-    .shelf-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 14px; }
-    .books-row { display: flex; gap: 7px; align-items: flex-end; height: 90px; border-bottom: 3px solid var(--border); }
-    .book {
-      border-radius: 1px 3px 3px 1px; cursor: pointer; transition: transform .18s, box-shadow .18s;
-      position: relative; writing-mode: vertical-rl; text-orientation: mixed;
-      font-size: 0.5rem; color: rgba(255,255,255,0.9); font-family: Georgia, serif;
-      letter-spacing: 0.04em; padding: 5px 3px; border-left: 2px solid rgba(0,0,0,0.18);
-      user-select: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      text-decoration: none; display: block;
-    }
-    .book:hover { transform: translateY(-14px); box-shadow: 2px 6px 16px rgba(0,0,0,0.18); z-index: 10; border-bottom: none; }
-    .book-tooltip {
-      display: none; position: absolute; bottom: 108%; left: 50%; transform: translateX(-50%);
-      background: var(--text); color: var(--bg); font-size: 0.68rem; padding: 5px 9px;
-      border-radius: 2px; white-space: nowrap; writing-mode: horizontal-tb; z-index: 20;
-      font-family: Georgia, serif; font-style: italic;
-    }
-    .book:hover .book-tooltip { display: block; }
-    .reading-now-wrap { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
-    .reading-now {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 13px 16px; background: var(--card); border: 1px solid var(--border);
-      border-left: 3px solid var(--accent); border-radius: 2px;
-      text-decoration: none; color: inherit; transition: border-color .2s;
-    }
-    .reading-now:hover { border-left-color: #8a3018; border-bottom: 1px solid var(--border); }
-    .rn-title { font-style: italic; color: var(--text); }
-    .rn-author { font-size: 0.82rem; color: var(--muted); }
-    .rn-badge { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); white-space: nowrap; }
-    .footer { font-size: 0.75rem; color: var(--muted); margin-top: 72px; }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jasroop Dhingra</title>
+  <meta name="description" content="Jasroop Dhingra is a software engineer in New York. Member of technical staff at Hanover Park. Studied computer science at Boston College.">
+  <meta name="author" content="Jasroop Dhingra">
+  <link rel="canonical" href="https://jasroop.me/">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jasroop Dhingra">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:url" content="https://jasroop.me/">
+  <meta property="og:title" content="Jasroop Dhingra">
+  <meta property="og:description" content="Software engineer in New York. Member of technical staff at Hanover Park. CS grad from Boston College.">
+  <meta property="og:image" content="https://jasroop.me/og.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jasroop Dhingra in a black cap and a pink sweater">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@jasroopdhingra">
+  <meta name="twitter:creator" content="@jasroopdhingra">
+  <meta name="twitter:title" content="Jasroop Dhingra">
+  <meta name="twitter:description" content="Software engineer in New York. Member of technical staff at Hanover Park. CS grad from Boston College.">
+  <meta name="twitter:image" content="https://jasroop.me/og.jpg">
+  <meta name="twitter:image:alt" content="Jasroop Dhingra in a black cap and a pink sweater">
+  <link rel="icon" type="image/png" href="/assets/favicon.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/apple-touch.png">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Jasroop Dhingra",
+    "url": "https://jasroop.me/",
+    "image": "https://jasroop.me/assets/jasroop.webp",
+    "jobTitle": "Member of Technical Staff",
+    "email": "mailto:jasroopdhingra@gmail.com",
+    "homeLocation": {
+      "@type": "Place",
+      "name": "New York City"
+    },
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Hanover Park",
+      "url": "https://www.hanoverpark.com/"
+    },
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "Boston College"
+    },
+    "sameAs": [
+      "https://github.com/jasroopdhingra",
+      "https://twitter.com/jasroopdhingra",
+      "https://goodreads.com/jasroop",
+      "https://www.linkedin.com/in/jasroopdhingra"
+    ]
+  }
+  </script>
 </head>
 <body>
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="sidebar">
+    <a class="logo hasAvatar" href="/">
+      <img class="avatar" src="/assets/jasroop.webp" width="42" height="42" alt="Jasroop Dhingra in a black cap and a pink sweater">
+      <span>jasroop dhingra</span>
+    </a>
+    <nav aria-label="Site">
+      <a href="/" aria-current="page">About</a>
+      <a href="/work.html">Work</a>
+      <a href="/writings/writings.html">Writing</a>
+      <a href="/books/books.html">Books</a>
+      <a href="/travels.html">Travels</a>
+      <a href="/connect.html">Connect</a>
+    </nav>
+  </header>
 
-<canvas id="bubbles"></canvas>
+  <main id="content" class="entry">
+    <h1>About</h1>
+    <p>I'm Jasroop Dhingra. I live in New York. I'm a member of technical staff at <a href="https://www.hanoverpark.com/" target="_blank" rel="noopener">Hanover Park</a>.</p>
+    <p>I studied computer science at Boston College and finished in 2025. In 2024 I was a founding engineer at <a href="https://shapes.inc" target="_blank" rel="noopener">Shapes</a>. Shapes had passed 30 million users. Lightspeed and Sequoia were the investors. I worked on the inference stack and on the product. In late 2025 I joined Margin, also as a founding engineer.</p>
+    <p>At Boston College I did ML research on a protein-aptamer model. It hit 97.96% accuracy.</p>
+    <p>When I'm not at a computer I'm reading. I'm on book 131, <a href="https://www.goodreads.com/book/show/208931300-intermezzo" target="_blank" rel="noopener"><em>Intermezzo</em></a>. There's a <a href="/Jasroop%20Dhingra%20Resume%202026.pdf">resume (pdf)</a> if you want the short version.</p>
 
-<div class="wrap">
-
-  <div class="name-row">
-    <div class="name">Jasroop Dhingra</div>
-    <div class="loc-pill">
-      <div class="pulse"></div>
-      <span id="loc-text">New York City</span>
-    </div>
-  </div>
-
-  <div class="headline">Builder. Reader. Nerd who ships.</div>
-  <div class="sub">Member of Technical Staff at <a href="https://www.hanoverpark.com/" target="_blank">Hanover Park</a>.</div>
-
-  <nav>
-    <a href="#work">Work</a>
-    <a href="#reading">Reading</a>
-    <a href="#writing">Writing</a>
-    <a href="mailto:jasroopdhingra@gmail.com">Contact</a>
-    <a href="Jasroop Dhingra Resume 2026.pdf"
-      target="_blank"
-      download
-      style="color: var(--accent);">
-      Resume ↗︎
-    </a> 
-  </nav>
-
-  <section>
-    <h2>About</h2>
-    <p>
-      CS grad from Boston College. In 2024 I was a founding engineer at
-      <a href="https://shapes.inc" target="_blank">Shapes</a>, 30M+ users, Lightspeed and Sequoia backed.
-      Rebuilt AI inference stacks, owned product surfaces end to end, shipped things that mattered
-      at a company where speed was the only strategy.
-    </p>
-    <p>
-      Late 2025 I did it again at Margin. Now I'm a Member of Technical Staff at
-      <a href="https://www.hanoverpark.com/" target="_blank">Hanover Park</a>.
-      When I'm not at a computer I'm reading. I'm currently on book 131:
-      <a href="https://www.goodreads.com/book/show/208931300-intermezzo" target="_blank"><em>Intermezzo</em></a>.
-    </p>
-  </section>
-
-  <hr />
-
-  <section id="work">
     <h2>Experience</h2>
     <ul>
-      <li><span class="ll">Member of Technical Staff, <a href="https://www.hanoverpark.com/" target="_blank">Hanover Park</a></span><span class="lr">2026</span></li>
-      <li><span class="ll">Founding Engineer, Shapes Inc</span><span class="lr">2024</span></li>
-      <li><span class="ll">Founding Engineer, Margin</span><span class="lr">Late 2025</span></li>
-      <li><span class="ll">ML Research, Boston College &mdash; protein-aptamer model, 97.96% accuracy</span><span class="lr">2023&ndash;2024</span></li>
-      <li><span class="ll">B.S. Computer Science, Boston College</span><span class="lr">Class of 2025</span></li>
+      <li>Member of technical staff, <a href="https://www.hanoverpark.com/" target="_blank" rel="noopener">Hanover Park</a> <span class="light">2026</span></li>
+      <li>Founding engineer, Margin <span class="light">late 2025</span></li>
+      <li>Founding engineer, Shapes <span class="light">2024</span></li>
+      <li>ML research, Boston College. Protein-aptamer model, 97.96% accuracy. <span class="light">2023 to 2024</span></li>
+      <li>B.S. computer science, Boston College <span class="light">class of 2025</span></li>
     </ul>
-  </section>
 
-  <hr />
-
-  <section id="projects">
     <h2>Projects</h2>
     <ul>
       <li>
-        <span class="ll">
-          <a href="https://github.com/jasroopdhingra/book-critic" target="_blank">Bookshelf</a>
-          &mdash; log a book, answer questions from an AI acting like an AP English teacher, get a review written in your own voice. React, Node, Groq, Turso.
-        </span>
-        <span class="lr"><a href="https://book-critic.onrender.com" target="_blank">live &#8599;</a></span>
+        <a href="https://github.com/jasroopdhingra/book-critic" target="_blank" rel="noopener">Bookshelf</a>.
+        Log a book, answer questions from an AI acting like an AP English teacher, get a review written in your own voice. React, Node, Groq, Turso.
+        <a href="https://book-critic.onrender.com" target="_blank" rel="noopener">Live</a>.
       </li>
       <li>
-        <span class="ll">
-          <a href="https://github.com/jasroopdhingra/posture" target="_blank">Posture monitor</a>
-          &mdash; real-time slouch detection via webcam. skeleton overlay, posture bar, pulsing red border when you're being a goblin. runs fully offline.
-        </span>
-        <span class="lr">Python, MediaPipe</span>
+        <a href="https://github.com/jasroopdhingra/posture" target="_blank" rel="noopener">Posture monitor</a>.
+        Webcam slouch detection. A skeleton overlay, a posture bar, and a pulsing red border when you're being a goblin. Runs offline. Python, MediaPipe.
       </li>
     </ul>
-  </section>
 
-  <hr />
-
-  <section id="reading">
     <h2>Reading</h2>
     <div class="shelf-wrap">
-      <div class="shelf-label">Favorites &mdash; click a spine</div>
+      <p class="shelf-label">Favorites. Click a spine.</p>
       <div class="books-row">
-        <a class="book" href="https://www.goodreads.com/book/show/23807.The_Silence_of_the_Lambs" target="_blank" style="background:#6b3a2a;width:26px;height:82px;">Silence of the Lambs<div class="book-tooltip">The Silence of the Lambs &mdash; Thomas Harris</div></a>
-        <a class="book" href="https://www.goodreads.com/book/show/19063.The_Book_Thief" target="_blank" style="background:#2a4a6b;width:22px;height:74px;">The Book Thief<div class="book-tooltip">The Book Thief &mdash; Markus Zusak</div></a>
-        <a class="book" href="https://www.goodreads.com/book/show/4406.East_of_Eden" target="_blank" style="background:#4a6b3a;width:28px;height:82px;">East of Eden<div class="book-tooltip">East of Eden &mdash; John Steinbeck &#9733;</div></a>
-        <a class="book" href="https://www.goodreads.com/book/show/166997.Stoner" target="_blank" style="background:#5a3a6b;width:20px;height:68px;">Stoner<div class="book-tooltip">Stoner &mdash; John Williams</div></a>
-        <a class="book" href="https://www.goodreads.com/book/show/170448.Animal_Farm" target="_blank" style="background:#8a6a2a;width:24px;height:72px;">Animal Farm<div class="book-tooltip">Animal Farm &mdash; George Orwell</div></a>
-        <a class="book" href="https://www.goodreads.com/book/show/18321.Arcadia" target="_blank" style="background:#3a6b5a;width:22px;height:66px;">Arcadia<div class="book-tooltip">Arcadia &mdash; Tom Stoppard</div></a>
-        <a class="book" href="https://www.goodreads.com/book/show/5107.The_Catcher_in_the_Rye" target="_blank" style="background:#6b4a3a;width:26px;height:80px;">Catcher in the Rye<div class="book-tooltip">The Catcher in the Rye &mdash; J.D. Salinger</div></a>
-        <a class="book" href="https://www.goodreads.com/book/show/5129.Brave_New_World" target="_blank" style="background:#3a4a6b;width:20px;height:70px;">Brave New World<div class="book-tooltip">Brave New World &mdash; Aldous Huxley</div></a>
-        <a class="book" href="https://www.goodreads.com/book/show/865516.The_Cosmic_Serpent" target="_blank" style="background:#6b3a5a;width:24px;height:76px;">Cosmic Serpent<div class="book-tooltip">The Cosmic Serpent &mdash; Jeremy Narby</div></a>
+        <a class="book" href="https://www.goodreads.com/book/show/23807.The_Silence_of_the_Lambs" target="_blank" rel="noopener" style="background:#6b3a2a;width:26px;height:82px;">Silence of the Lambs<span class="book-tooltip">The Silence of the Lambs, Thomas Harris</span></a>
+        <a class="book" href="https://www.goodreads.com/book/show/19063.The_Book_Thief" target="_blank" rel="noopener" style="background:#2a4a6b;width:22px;height:74px;">The Book Thief<span class="book-tooltip">The Book Thief, Markus Zusak</span></a>
+        <a class="book" href="https://www.goodreads.com/book/show/4406.East_of_Eden" target="_blank" rel="noopener" style="background:#4a6b3a;width:28px;height:82px;">East of Eden<span class="book-tooltip">East of Eden, John Steinbeck ★</span></a>
+        <a class="book" href="https://www.goodreads.com/book/show/166997.Stoner" target="_blank" rel="noopener" style="background:#5a3a6b;width:20px;height:68px;">Stoner<span class="book-tooltip">Stoner, John Williams</span></a>
+        <a class="book" href="https://www.goodreads.com/book/show/170448.Animal_Farm" target="_blank" rel="noopener" style="background:#8a6a2a;width:24px;height:72px;">Animal Farm<span class="book-tooltip">Animal Farm, George Orwell</span></a>
+        <a class="book" href="https://www.goodreads.com/book/show/18321.Arcadia" target="_blank" rel="noopener" style="background:#3a6b5a;width:22px;height:66px;">Arcadia<span class="book-tooltip">Arcadia, Tom Stoppard</span></a>
+        <a class="book" href="https://www.goodreads.com/book/show/5107.The_Catcher_in_the_Rye" target="_blank" rel="noopener" style="background:#6b4a3a;width:26px;height:80px;">Catcher in the Rye<span class="book-tooltip">The Catcher in the Rye, J.D. Salinger</span></a>
+        <a class="book" href="https://www.goodreads.com/book/show/5129.Brave_New_World" target="_blank" rel="noopener" style="background:#3a4a6b;width:20px;height:70px;">Brave New World<span class="book-tooltip">Brave New World, Aldous Huxley</span></a>
+        <a class="book" href="https://www.goodreads.com/book/show/865516.The_Cosmic_Serpent" target="_blank" rel="noopener" style="background:#6b3a5a;width:24px;height:76px;">Cosmic Serpent<span class="book-tooltip">The Cosmic Serpent, Jeremy Narby</span></a>
       </div>
     </div>
-    <div class="reading-now-wrap">
-      <a class="reading-now" href="https://www.goodreads.com/book/show/208931300-intermezzo" target="_blank">
-        <div><div class="rn-title">Intermezzo</div><div class="rn-author">Sally Rooney &mdash; 25%</div></div>
-        <div class="rn-badge">reading now</div>
-      </a>
-      <a class="reading-now" href="https://www.goodreads.com/book/show/123444043-the-trio" target="_blank">
-        <div><div class="rn-title">The Trio</div><div class="rn-author">Johanna Hedman &mdash; p. 140 of 336</div></div>
-        <div class="rn-badge">reading now</div>
-      </a>
-    </div>
-  </section>
+    <p class="light">Open right now</p>
+    <ul>
+      <li><a href="https://www.goodreads.com/book/show/208931300-intermezzo" target="_blank" rel="noopener"><em>Intermezzo</em></a>, Sally Rooney. 25%.</li>
+      <li><a href="https://www.goodreads.com/book/show/123444043-the-trio" target="_blank" rel="noopener"><em>The Trio</em></a>, Johanna Hedman. Page 140 of 336.</li>
+    </ul>
 
-  <hr />
-
-  <section id="writing">
     <h2>Writing</h2>
     <ul>
-      <li><span class="ll"><a href="https://jasroop.me/writings/developer">Building a developer ecosystem</a></span><span class="lr">Jun 2024</span></li>
-      <li><span class="ll"><a href="https://jasroop.me/writings/recruiter">Being a recruiter for a week</a></span><span class="lr">Jun 2024</span></li>
-      <li><span class="ll"><a href="https://jasroop.me/writings/prompt">Gaming and prompting</a></span><span class="lr">Jul 2024</span></li>
+      <li><a href="/writings/twenty-eight.html">Twenty-eight countries</a> <span class="light">Oct 2026</span></li>
+      <li><a href="/writings/book-131.html">Book 131</a> <span class="light">Oct 2026</span></li>
+      <li><a href="/writings/red-border.html">A red border</a> <span class="light">Oct 2026</span></li>
+      <li><a href="/writings/developer.html">Building a developer ecosystem</a> <span class="light">Jun 2024</span></li>
+      <li><a href="/writings/recruiter.html">Being a recruiter for a week</a> <span class="light">Jun 2024</span></li>
+      <li><a href="/writings/prompt.html">Gaming and prompting</a> <span class="light">Jul 2024</span></li>
+      <li><a href="/writings/writings.html">All writing</a></li>
     </ul>
-  </section>
 
-  <hr />
-
-  <section id="now">
     <h2>Now</h2>
     <ul>
-      <li><span class="ll">Member of Technical Staff at <a href="https://www.hanoverpark.com/" target="_blank">Hanover Park</a></span><span class="lr">Mar 2026</span></li>
-      <li><span class="ll">Based in New York City</span><span class="lr"></span></li>
-      <li><span class="ll">Trying to hit 45 books this year</span><span class="lr">3 down, 42 to go</span></li>
+      <li>Member of technical staff at <a href="https://www.hanoverpark.com/" target="_blank" rel="noopener">Hanover Park</a> <span class="light">Mar 2026</span></li>
+      <li>Based in New York City</li>
+      <li>Trying to read 45 books this year <span class="light">3 finished, 42 to go</span></li>
     </ul>
-  </section>
 
-  <hr />
-
-  <section>
     <h2>Elsewhere</h2>
     <ul>
-      <li><span class="ll"><a href="https://github.com/jasroopdhingra" target="_blank">GitHub</a></span><span class="lr">jasroopdhingra</span></li>
-      <li><span class="ll"><a href="https://twitter.com/jasroopdhingra" target="_blank">X / Twitter</a></span><span class="lr">@jasroopdhingra</span></li>
-      <li><span class="ll"><a href="https://goodreads.com/jasroop" target="_blank">Goodreads</a></span><span class="lr">130 books read</span></li>
-      <li><span class="ll"><a href="https://www.linkedin.com/in/jasroopdhingra">LinkedIn</a></span><span class="lr">linkedIn</span></li>
-      <li><span class="ll"><a href="mailto:jasroopdhingra@gmail.com">Email</a></span><span class="lr">jasroopdhingra@gmail.com</span></li>
+      <li><a href="https://github.com/jasroopdhingra" target="_blank" rel="noopener">GitHub</a> <span class="light">jasroopdhingra</span></li>
+      <li><a href="https://twitter.com/jasroopdhingra" target="_blank" rel="noopener">X</a> <span class="light">@jasroopdhingra</span></li>
+      <li><a href="https://goodreads.com/jasroop" target="_blank" rel="noopener">Goodreads</a> <span class="light">130 books</span></li>
+      <li><a href="https://www.linkedin.com/in/jasroopdhingra" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:jasroopdhingra@gmail.com">Email</a> <span class="light">jasroopdhingra@gmail.com</span></li>
     </ul>
-  </section>
-
-  <div class="footer">jasroop.me &middot; 2026</div>
-
-</div>
-
-<script>
-// bubbles
-const canvas = document.getElementById('bubbles');
-const ctx = canvas.getContext('2d');
-let W, H, bubbles = [];
-function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-function mkBubble() {
-  return { x: Math.random()*W, y: H+Math.random()*200, r: 8+Math.random()*28,
-    speed: 0.25+Math.random()*0.5, drift: (Math.random()-0.5)*0.3,
-    opacity: 0.03+Math.random()*0.06, hue: 20+Math.random()*30 };
-}
-function init() { resize(); bubbles = Array.from({length:22}, mkBubble); }
-function draw() {
-  ctx.clearRect(0,0,W,H);
-  for (const b of bubbles) {
-    ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-    ctx.strokeStyle=`hsla(${b.hue},40%,55%,${b.opacity})`; ctx.lineWidth=1.2; ctx.stroke();
-    b.y-=b.speed; b.x+=b.drift;
-    if (b.y+b.r<-10) { Object.assign(b,mkBubble()); b.y=H+b.r; }
-  }
-  requestAnimationFrame(draw);
-}
-window.addEventListener('resize', resize);
-init(); draw();
-</script>
+  </main>
 </body>
 </html>
