@@ -1,14 +1,14 @@
-/* Layout follows devan.cv: a right-aligned sidebar, a 425px column,
-   small tracked uppercase navigation, and a dotted link underline.
-   The type is EB Garamond. Body box-sizing stays content-box so
-   width is the text column and the left padding is the sidebar slot. */
+/* Layout numbers follow devan.cv's style.css: 425px column,
+   222px sidebar offset, 160px sidebar, 42px photo, 12px tracked
+   uppercase name and nav, 11px body. The face is Times New Roman.
+   Body stays content-box so width is the text column. */
 
 :root {
   --text: #111;
-  --muted: #737373;
+  --muted: #8a8a8a;
   --line: #dadada;
   --bg: #fff;
-  --serif: "EB Garamond", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --serif: "Times New Roman", Times, serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -17,13 +17,13 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   box-sizing: content-box;
-  margin: 4.6em auto 3.5em;
+  margin: 7em auto;
   padding: 0 74px 0 222px;
   width: 425px;
   position: relative;
   background: var(--bg);
   color: var(--text);
-  font: 16.5px/1.7 var(--serif);
+  font: 11px/1.8 var(--serif);
   word-wrap: break-word;
 }
 
@@ -37,9 +37,10 @@ body {
   text-align: right;
   font-family: var(--serif);
   font-weight: 400;
-  font-size: 15px;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.7325px;
+  margin-bottom: 1em;
 }
 
 .sidebar a { display: block; }
@@ -54,12 +55,21 @@ body {
   text-shadow: none;
 }
 
-.logo.hasAvatar { word-spacing: 160px; }
+/* Shrink to the name, sit on the sidebar's right edge, and
+   center the photo over that name. */
+.logo.hasAvatar {
+  display: inline-block;
+  width: auto;
+  text-align: center;
+  word-spacing: normal;
+}
 
 .logo.hasAvatar span {
   display: block;
   margin-top: 0.45em;
-  line-height: 1.4;
+  line-height: 1.15;
+  letter-spacing: 1.7325px;
+  margin-right: -1.7325px;
 }
 
 .avatar {
@@ -67,9 +77,8 @@ body {
   height: 42px;
   object-fit: cover;
   object-position: center 18%;
-  display: inline-block;
-  vertical-align: middle;
-  margin: -0.1em 0.1em 0 0;
+  display: block;
+  margin: -0.1em auto 0;
 }
 
 .sidebar nav a {
@@ -77,11 +86,11 @@ body {
   text-decoration: none;
   background: none;
   text-shadow: none;
-  line-height: 1.85;
+  line-height: 1.8;
   white-space: nowrap;
 }
 
-.sidebar nav a[aria-current="page"] { color: var(--text); }
+.sidebar nav a[aria-current="page"] { color: var(--muted); }
 
 .sidebar nav a:hover { color: var(--text); }
 
@@ -92,16 +101,16 @@ h1 {
   line-height: 1.3;
   letter-spacing: normal;
   text-transform: none;
-  margin: 0 0 0.15em;
+  margin: 0 0 1em;
 }
 
 h2, h3 {
   font-family: var(--serif);
-  font-size: 15px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  margin: 2em 0 0.7em;
+  letter-spacing: 1.7325px;
+  margin: 2em 0 1em;
   line-height: 1.4;
 }
 
@@ -109,7 +118,7 @@ h1 + .light { margin-top: -0.35em; }
 
 .entry p,
 .entry > ul,
-.entry > ol { margin: 1.35em 0; }
+.entry > ol { margin: 1.6em 0; }
 
 .light { color: var(--muted); }
 
@@ -277,33 +286,32 @@ th, td {
   border: 0;
 }
 
-@media (max-width: 933px) {
+@media screen and (max-width: 933px) {
   body {
     width: auto;
-    max-width: 440px;
-    margin: 1.6em auto 3em;
-    padding: 0 1.25rem 2.5rem;
+    max-width: none;
+    margin: 2em auto;
+    padding: 0 2em;
   }
 
   .sidebar {
     position: relative;
     width: 100%;
     text-align: center;
-    margin: 0 0 2.2em;
-    letter-spacing: 1px;
+    margin: 0 0 3em;
   }
 
+  .sidebar a { display: inline-block; }
+
   .sidebar .logo {
-    margin: 0 0 0.7em;
+    margin: 0 0 0.85em;
+    display: block;
     text-align: center;
   }
 
-  .logo.hasAvatar { word-spacing: 0; }
-
-  .sidebar nav a {
+  .logo.hasAvatar {
     display: inline-block;
-    margin: 0.1em 0.45em;
-    padding: 0.3em 0.05em;
+    word-spacing: 0;
   }
 
   .book-tooltip { display: none !important; }
