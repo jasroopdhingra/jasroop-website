@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jasroop Dhingra</title>
-  <meta name="description" content="Jasroop Dhingra writes software in New York at Hanover Park.">
+  <meta name="description" content="Jasroop Dhingra wrangles agent swarms at Hanover Park, creating the financial brain for private markets.">
   <meta name="author" content="Jasroop Dhingra">
   <link rel="canonical" href="https://jasroop.me/">
   <meta name="theme-color" content="#ffffff">
@@ -13,7 +13,7 @@
   <meta property="og:locale" content="en_US">
   <meta property="og:url" content="https://jasroop.me/">
   <meta property="og:title" content="Jasroop Dhingra">
-  <meta property="og:description" content="Jasroop Dhingra writes software in New York at Hanover Park.">
+  <meta property="og:description" content="Jasroop Dhingra wrangles agent swarms at Hanover Park, creating the financial brain for private markets.">
   <meta property="og:image" content="https://jasroop.me/og.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
@@ -23,7 +23,7 @@
   <meta name="twitter:site" content="@jasroopdhingra">
   <meta name="twitter:creator" content="@jasroopdhingra">
   <meta name="twitter:title" content="Jasroop Dhingra">
-  <meta name="twitter:description" content="Jasroop Dhingra writes software in New York at Hanover Park.">
+  <meta name="twitter:description" content="Jasroop Dhingra wrangles agent swarms at Hanover Park, creating the financial brain for private markets.">
   <meta name="twitter:image" content="https://jasroop.me/og.jpg">
   <meta name="twitter:image:alt" content="Jasroop Dhingra in a black cap and a pink sweater">
   <link rel="icon" type="image/png" href="/assets/favicon.png" sizes="32x32">
@@ -66,7 +66,6 @@
     </a>
     <nav aria-label="Site">
       <a href="/" aria-current="page">About</a>
-      <a href="/notes.html">Notes</a>
       <a href="/favorites.html">Favorites</a>
       <a href="/travels.html">Travels</a>
     </nav>
@@ -74,8 +73,33 @@
 
   <main id="content" class="entry">
     <h1>About</h1>
-    <p>I write software in New York at <a href="https://www.hanoverpark.com/" target="_blank" rel="noopener">Hanover Park</a>, which does fund administration for venture firms, with AI doing the first pass and accountants checking it. Earlier I was on the founding team at <a href="https://shapes.inc" target="_blank" rel="noopener">Shapes</a>, a consumer app for hanging out with people and AIs together. At <a href="https://pieces.app/" target="_blank" rel="noopener">Pieces</a> I built Vim and Neovim plugins, and at Boston College I studied computer science and taught in the campus makerspace.</p>
-    <p>Most of my free time goes to books. I'm somewhere past 130 of them now, currently in the middle of Sally Rooney's Intermezzo. I've been to 28 countries, from Reykjavik to Tokyo, and I live in New York. If any of this sounds interesting, reach me on <a href="https://twitter.com/jasroopdhingra" target="_blank" rel="noopener">X</a>, <a href="https://www.linkedin.com/in/jasroopdhingra" target="_blank" rel="noopener">LinkedIn</a>, or <a href="https://github.com/jasroopdhingra" target="_blank" rel="noopener">GitHub</a>.</p>
+    <p>Hi. I'm Jasroop. These days I spend most of my time wrangling agent swarms. I currently do that at <a href="https://www.hanoverpark.com/" target="_blank" rel="noopener">Hanover Park</a>, where we're creating the financial brain for private markets. We are fewer than 20 engineers and raised $31M from leading fund CFOs and venture capitalists.</p>
+    <p>We administer $40B in assets. It is day <span id="day-count">217</span> for me on the team.</p>
+    <p>Prior to Hanover Park, I was the founding engineer at <a href="https://shapes.inc" target="_blank" rel="noopener">Shapes</a>. I played a small part in introducing 30M+ people to multiplayer AI.</p>
+    <p>I build because I have opinions on how things should be. Code is my most effective medium for sharing those opinions.</p>
+    <p>When I'm away from my computer, I like to travel and read horror books. I finish a book every week, and have since 2011, when I was 8. I also play tennis every weekend.</p>
+    <p>I'm based in New York City. Reach me on <a href="https://twitter.com/jasroopdhingra" target="_blank" rel="noopener">X</a>, <a href="https://www.linkedin.com/in/jasroopdhingra" target="_blank" rel="noopener">LinkedIn</a>, or <a href="https://github.com/jasroopdhingra" target="_blank" rel="noopener">GitHub</a>.</p>
   </main>
+  <script>
+    (function () {
+      var el = document.getElementById("day-count");
+      if (!el || typeof Intl === "undefined") return;
+      var parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/New_York",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).formatToParts(new Date());
+      var y, m, d;
+      for (var i = 0; i < parts.length; i++) {
+        if (parts[i].type === "year") y = +parts[i].value;
+        if (parts[i].type === "month") m = +parts[i].value;
+        if (parts[i].type === "day") d = +parts[i].value;
+      }
+      if (!y || !m || !d) return;
+      var n = Math.round((Date.UTC(y, m - 1, d) - Date.UTC(2026, 2, 23)) / 86400000) + 1;
+      if (n >= 1) el.textContent = String(n);
+    })();
+  </script>
 </body>
 </html>

@@ -19,8 +19,23 @@
   status = 301
 
 [[redirects]]
-  from = "/writings/writings.html"
-  to = "/notes.html"
+  from = "/notes"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/notes.html"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/writings/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/random/*"
+  to = "/"
   status = 301
 
 [[redirects]]
