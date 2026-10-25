@@ -112,13 +112,9 @@ h2, h3 {
   line-height: 1.4;
 }
 
-h1 + .light { margin-top: -0.35em; }
-
 .entry p,
 .entry > ul,
 .entry > ol { margin: 1.6em 0; }
-
-.light { color: var(--muted); }
 
 a { color: inherit; text-decoration: none; }
 
@@ -154,8 +150,7 @@ li { margin: 0.15em 0; }
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
-textarea:focus-visible,
-canvas:focus-visible {
+textarea:focus-visible {
   outline: 2px solid #111;
   outline-offset: 2px;
 }
@@ -191,35 +186,6 @@ th, td {
   padding: 6px 9.6px;
   text-align: left;
   vertical-align: top;
-}
-
-.globe-canvas {
-  width: 100%;
-  aspect-ratio: 1;
-  display: block;
-  background: #fff;
-  cursor: grab;
-  touch-action: none;
-  margin: 0.2em 0 0;
-}
-
-.globe-canvas.is-grabbing { cursor: grabbing; }
-
-.globe-label {
-  min-height: 1.45em;
-  margin: 0.15em 0 0.2em;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }
 
 @media screen and (max-width: 933px) {
