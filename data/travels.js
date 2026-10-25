@@ -18,11 +18,10 @@
  *                     Home is New York. The repo's pages say New York,
  *                     not another US city.
  *
- * Pins use one main city per country:
- *   Spain is Madrid (Barcelona would also have been fine).
- *   Mexico is Mexico City (not Cancun).
- *   Canada is Toronto.
- *   Everywhere else uses the city named with the country.
+ * Most countries use one main city. The United States also has the
+ * other cities from the trip list, all with country "USA", so they
+ * share the existing home country and do not raise the country count.
+ * Aruba is its own pin. Existing pins stay as they were.
  */
 window.TRAVELS = [
   { name: "New York", country: "USA", lat: 40.7128, lon: -74.006, home: true },
@@ -52,5 +51,25 @@ window.TRAVELS = [
   { name: "Vatican City", country: "Vatican City", lat: 41.9029, lon: 12.4534 },
   { name: "Lisbon", country: "Portugal", lat: 38.7223, lon: -9.1393 },
   { name: "Dublin", country: "Ireland", lat: 53.3498, lon: -6.2603 },
-  { name: "Amsterdam", country: "Netherlands", lat: 52.3676, lon: 4.9041 }
+  { name: "Amsterdam", country: "Netherlands", lat: 52.3676, lon: 4.9041 },
+  { name: "Newport", country: "USA", lat: 41.4901, lon: -71.3128 },
+  { name: "Montauk", country: "USA", lat: 41.0359, lon: -71.9545 },
+  { name: "Queens", country: "USA", lat: 40.7282, lon: -73.7949 },
+  { name: "Brooklyn", country: "USA", lat: 40.6782, lon: -73.9442 },
+  { name: "Half Moon Bay", country: "USA", lat: 37.4636, lon: -122.4286 },
+  { name: "San Francisco", country: "USA", lat: 37.7749, lon: -122.4194 },
+  { name: "Napa", country: "USA", lat: 38.5025, lon: -122.2654 },
+  { name: "Point Reyes", country: "USA", lat: 38.0694, lon: -122.8069 },
+  { name: "Philadelphia", country: "USA", lat: 39.9526, lon: -75.1652 },
+  { name: "Cambridge", country: "USA", lat: 42.3736, lon: -71.1097 },
+  { name: "Boston", country: "USA", lat: 42.3601, lon: -71.0589 },
+  { name: "Honolulu", country: "USA", lat: 21.3069, lon: -157.8583 },
+  { name: "Oranjestad", country: "Aruba", lat: 12.5092, lon: -70.0086 },
+  { name: "San Diego", country: "USA", lat: 32.7157, lon: -117.1611 },
+  { name: "Los Angeles", country: "USA", lat: 34.0522, lon: -118.2437 },
+  { name: "Lake Tahoe", country: "USA", lat: 38.9399, lon: -119.9772 },
+  { name: "Salt Lake City", country: "USA", lat: 40.7608, lon: -111.891 },
+  { name: "Cheyenne", country: "USA", lat: 41.14, lon: -104.8202 },
+  { name: "Omaha", country: "USA", lat: 41.2565, lon: -95.9345 },
+  { name: "Chicago", country: "USA", lat: 41.8781, lon: -87.6298 }
 ];
